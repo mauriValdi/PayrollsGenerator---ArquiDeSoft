@@ -2,13 +2,13 @@ package payrollcasestudy.transactions.change;
 
 import org.junit.Rule;
 import org.junit.Test;
+
 import payrollcasestudy.DatabaseResource;
 import payrollcasestudy.boundaries.PayrollDatabase;
 import payrollcasestudy.entities.Employee;
 import payrollcasestudy.entities.affiliations.UnionAffiliation;
 import payrollcasestudy.transactions.Transaction;
 import payrollcasestudy.transactions.add.AddHourlyEmployeeTransaction;
-
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 
@@ -34,11 +34,11 @@ public class ChangeNoMemberTransactionTest {
         database.addUnionMember(memberId, employee);
         assertThat(database.getUnionMember(memberId), is(employee));
 
-        Transaction noMemberTransaction = new ChangeNoMemberTransaction(employeeId);
+        Transaction noMemberTransaction = new ChangeNoMemberTransaction(employeeId,memberId);
         noMemberTransaction.execute();
 
         employee = database.getEmployee(employeeId);
-        assertThat(employee.getUnionAffiliation(), is(UnionAffiliation.NO_AFFILIATION));
+        assertThat(employee.getUnionAffiliation(), is(nullValue()));
 
         assertThat(database.getUnionMember(memberId), is(nullValue()));
     }

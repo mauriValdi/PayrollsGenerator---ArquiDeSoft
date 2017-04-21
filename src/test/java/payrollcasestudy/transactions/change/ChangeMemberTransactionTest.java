@@ -2,12 +2,12 @@ package payrollcasestudy.transactions.change;
 
 import org.junit.Rule;
 import org.junit.Test;
+
 import payrollcasestudy.DatabaseResource;
 import payrollcasestudy.entities.Employee;
 import payrollcasestudy.entities.affiliations.UnionAffiliation;
 import payrollcasestudy.transactions.add.AddEmployeeTransaction;
 import payrollcasestudy.transactions.add.AddHourlyEmployeeTransaction;
-
 import static org.hamcrest.Matchers.*;
 import static org.junit.Assert.assertThat;
 import static payrollcasestudy.TestConstants.*;

@@ -40,7 +40,7 @@ public class AddSalariedEmployeeTransactionTest {
 
         assertThat(employee.getPaymentSchedule(), is(instanceOf(MonthlyPaymentSchedule.class)));
         assertThat(employee.getPaymentMethod(), is(instanceOf(HoldMethod.class)));
-        assertThat(employee.getUnionAffiliation(), is(UnionAffiliation.NO_AFFILIATION));
+        assertThat(employee.getUnionAffiliation(), is(nullValue()));
     }
 
 }
