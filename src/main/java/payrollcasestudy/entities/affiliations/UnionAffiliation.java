@@ -10,7 +10,7 @@ import org.hamcrest.Matcher;
 
 public class UnionAffiliation {
 
-	public static final Matcher NO_AFFILIATION = null;
+	public static final UnionAffiliation NO_AFFILIATION = null;
 	private int memberId;
 	private double dues;
 	private Map<Calendar, ServiceCharge> serviceCharges = new HashMap<Calendar, ServiceCharge>();

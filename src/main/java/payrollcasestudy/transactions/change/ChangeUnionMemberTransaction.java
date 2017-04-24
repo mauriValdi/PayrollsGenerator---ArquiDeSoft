@@ -7,21 +7,20 @@ import payrollcasestudy.transactions.Transaction;
 public abstract class ChangeUnionMemberTransaction implements Transaction {
 
 	   PayrollDatabase database = PayrollDatabase.globalPayrollDatabase;
-	    private int employeeId;
-	    private int memberId;
+	    private int employeeId;	
 
-	    public ChangeUnionMemberTransaction(int employeeId, int memberId) {
+	    public ChangeUnionMemberTransaction(int employeeId) {
 	        this.employeeId = employeeId;
-	        this.memberId = memberId;
 	    }
 
 	    public void execute() {
 	        Employee employee = database.getEmployee(employeeId);
-	        changeMember(employee,memberId);
+	        int memberId = employee.getUnionAffiliation().getMemberId();
+	        changeMember(employee);
 	        database.addUnionMember(memberId, employee);
 	    }
 
-	public abstract void changeMember(Employee employee, int memberId);
+	public abstract void changeMember(Employee employee);
 	
 
 }
