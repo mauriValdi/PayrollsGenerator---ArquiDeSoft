@@ -2,6 +2,7 @@ package payrollcasestudy.transactions.change;
 
 import payrollcasestudy.boundaries.PayrollDatabase;
 import payrollcasestudy.entities.Employee;
+import payrollcasestudy.entities.affiliations.UnionAffiliation;
 import payrollcasestudy.transactions.Transaction;
 
 public abstract class ChangeUnionMemberTransaction implements Transaction {
@@ -14,13 +15,12 @@ public abstract class ChangeUnionMemberTransaction implements Transaction {
 	    }
 
 	    public void execute() {
-	        Employee employee = database.getEmployee(employeeId);
-	        int memberId = employee.getUnionAffiliation().getMemberId();
-	        changeMember(employee);
-	        database.addUnionMember(memberId, employee);
+	        Employee employee = database.getEmployee(employeeId);	       
+	        changeMember(employee);	        
 	    }
 
 	public abstract void changeMember(Employee employee);
 	
+	protected abstract UnionAffiliation getAffiliation();
 
 }

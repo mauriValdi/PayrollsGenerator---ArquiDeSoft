@@ -18,6 +18,7 @@ public class ChangeNoMemberTransaction extends ChangeUnionMemberTransaction {
     public void changeMember(Employee employee) {
         int memberId = employee.getUnionAffiliation().getMemberId();
         database.deleteUnionMember(memberId);
+        employee.setUnionAffiliation(getAffiliation());
     }
 
 }
