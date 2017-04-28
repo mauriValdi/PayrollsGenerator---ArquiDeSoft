@@ -14,7 +14,7 @@ public class Employee {
     private int employeeId;
     private String name;
     private String address;
-    private UnionAffiliation employeeUnionAffiliation;
+    private UnionAffiliation employeeUnionAffiliation = UnionAffiliation.NO_AFFILIATION;;
 
     public Employee(int employeeId, String name, String address) {
         this.employeeId = employeeId;
@@ -72,7 +72,9 @@ public class Employee {
 
     public void payDay(PayCheck payCheck) {
         double grossPay = paymentClassification.calculatePay(payCheck);
-        double netPay = grossPay;
+        double deductions = employeeUnionAffiliation.calculateDeduction(payCheck);
+        double netPay = grossPay - deductions;
+        payCheck.setDeductions(deductions);
         payCheck.setGrossPay(grossPay);
         payCheck.setNetPay(netPay);
         paymentMethod.pay(payCheck);
