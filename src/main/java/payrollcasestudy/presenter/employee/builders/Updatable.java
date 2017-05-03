@@ -1,4 +1,4 @@
-package presenters;
+package payrollcasestudy.presenter.employee.builders;
 
 public interface Updatable {
 	String updateNombre(String nombre);
