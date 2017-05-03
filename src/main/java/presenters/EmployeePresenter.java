@@ -1,19 +1,47 @@
 package presenters;
 
 import payrollcasestudy.entities.Employee;
-import payrollcasestudy.presenter.employee.builders.EmpleadoView;
+import payrollcasestudy.presenter.employee.builders.EmployeeView;
+import payrollcasestudy.transactions.Transaction;
+import payrollcasestudy.transactions.add.*;
 
-public class EmployeePresenter {
+import java.util.Iterator;
+import java.util.Set;
+
+import payrollcasestudy.boundaries.*;
+
+public class EmployeePresenter {	
 	
-	private int id; /*solo para prueba*/
-	
-	public EmployeePresenter(int id) {
-		this.id = id;
+	public EmployeePresenter(int id) {		
 	}
 
-	public String showEmployee(int id){
-		EmpleadoView view = new EmpleadoView();/*solo prueba (deberia sacar el empleado y ejecurar el update para retornarlo)*/
-		Employee nuevoEmpleado = new Employee(1,"juan","La calle 1");
-		return nuevoEmpleado.update(view);
+	public void newEmployee(String name, String address, String paymentClassification, double hourlyRate, double salary, double commissionRate)
+	{
+		Transaction addEmployeeTransaction = null;
+		Set<Integer> employeesIds = PayrollDatabase.globalPayrollDatabase.getAllEmployeeIds();
+		int employeeId = 0;
+		if(!employeesIds.isEmpty())
+			employeeId = employeesIds.toArray().length;
+		
+		if(paymentClassification == "Hourly")
+			addEmployeeTransaction = new AddHourlyEmployeeTransaction(employeeId, name, address, hourlyRate);
+		if(paymentClassification == "Salaried")
+			addEmployeeTransaction = new AddSalariedEmployeeTransaction(employeeId, name, address, salary);
+		if(paymentClassification == "Commissioned")
+			addEmployeeTransaction = new AddCommissionedEmployeeTransaction(employeeId, name, address, salary , commissionRate);
+		
+		addEmployeeTransaction.execute();
+	}
+	
+	public String showEmployees(){	
+		EmployeeView view = new EmployeeView();
+		String employeesTable = "";
+		Set<Integer> employeesIds = PayrollDatabase.globalPayrollDatabase.getAllEmployeeIds();
+		for (Iterator<Integer> it = employeesIds.iterator(); it.hasNext();) {
+			int employeeId = it.next();
+			Employee employee = PayrollDatabase.globalPayrollDatabase.getEmployee(employeeId);
+			employeesTable = employeesTable + employee.update(view);
+		}
+		return employeesTable;
 	}
 }

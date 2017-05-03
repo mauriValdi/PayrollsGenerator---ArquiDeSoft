@@ -1,10 +1,10 @@
 package payrollcasestudy.entities;
 
 import payrollcasestudy.entities.affiliations.UnionAffiliation;
-import payrollcasestudy.entities.paymentclassifications.PaymentClassification;
+import payrollcasestudy.entities.paymentclassifications.*;
 import payrollcasestudy.entities.paymentmethods.PaymentMethod;
 import payrollcasestudy.entities.paymentschedule.PaymentSchedule;
-import payrollcasestudy.presenter.employee.builders.EmpleadoView;
+import payrollcasestudy.presenter.employee.builders.EmployeeView;
 import payrollcasestudy.presenter.employee.builders.Updatable;
 
 import java.util.Calendar;
@@ -28,7 +28,7 @@ public class Employee {
 	private UnionAffiliation employeeUnionAffiliation = UnionAffiliation.NO_AFFILIATION;;
 
     public Employee(int employeeId, String name, String address) {
-    	this.updatable = new EmpleadoView();
+    	this.updatable = new EmployeeView();
         this.employeeId = employeeId;
         this.name = name;
         this.address = address;
@@ -100,12 +100,34 @@ public class Employee {
 		return employeeUnionAffiliation;
 	}
 	
-	public String update(Updatable u) {
+	public String update(Updatable update) {
 		String result = "";
-		result += u.inicioEmpleado();
-		result += u.updateNombre(name);
-		result += u.updateAddress(address);
-		result += u.finEmpleado();
+		result += update.startEmployee();
+		result += update.updateName(name);
+		result += update.updateAddress(address);
+		if(paymentClassification instanceof HourlyPaymentClassification)
+		{
+			result += update.updatePaymentClass("Hourly");
+			HourlyPaymentClassification hourlyPaymentClassification = (HourlyPaymentClassification) paymentClassification;
+			result += update.updateHourlyRate(Double.toString(hourlyPaymentClassification.getHourlyRate()));
+			result += update.updatePaymentSchedule("Weekly");
+		}
+		if(paymentClassification instanceof SalariedClassification)
+		{
+			result += update.updatePaymentClass("Salaried");
+			SalariedClassification salariedClassification = (SalariedClassification) paymentClassification;
+			result += update.updateSalary(Double.toString(salariedClassification.getSalary()));
+			result += update.updatePaymentSchedule("Monthly");
+		}
+		if(paymentClassification instanceof CommissionedPaymentClassification)
+		{
+			result += update.updatePaymentClass("Commissioned");
+			CommissionedPaymentClassification commissionedClassification = (CommissionedPaymentClassification) paymentClassification;
+			result += update.updateSalary(Double.toString(commissionedClassification.getMonthlySalary()));
+			result += update.updateComissionRate(Double.toString(commissionedClassification.getCommissionRate()));
+			result += update.updatePaymentSchedule("Biweekly");
+		}		
+		result += update.endEmployee();
 		return result;
 	}
 
