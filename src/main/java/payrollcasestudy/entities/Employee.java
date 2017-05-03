@@ -4,6 +4,7 @@ import payrollcasestudy.entities.affiliations.UnionAffiliation;
 import payrollcasestudy.entities.paymentclassifications.PaymentClassification;
 import payrollcasestudy.entities.paymentmethods.PaymentMethod;
 import payrollcasestudy.entities.paymentschedule.PaymentSchedule;
+import payrollcasestudy.presenter.employee.builders.EmpleadoView;
 import payrollcasestudy.presenter.employee.builders.Updatable;
 
 import java.util.Calendar;
@@ -16,9 +17,18 @@ public class Employee {
     private String name;
     private String address;
     private Updatable updatable;
-    private UnionAffiliation employeeUnionAffiliation = UnionAffiliation.NO_AFFILIATION;;
+    public Updatable getUpdatable() {
+		return updatable;
+	}
+
+	public void setUpdatable(Updatable updatable) {
+		this.updatable = updatable;
+	}
+
+	private UnionAffiliation employeeUnionAffiliation = UnionAffiliation.NO_AFFILIATION;;
 
     public Employee(int employeeId, String name, String address) {
+    	this.updatable = new EmpleadoView();
         this.employeeId = employeeId;
         this.name = name;
         this.address = address;

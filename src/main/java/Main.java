@@ -1,10 +1,13 @@
 import static spark.Spark.*;
 
+import payrollcasestudy.presenter.employee.builders.Updatable;
+import presenters.EmployeePresenter;
+
 public class Main {
 
 	public static void main(String[] args) {
 		get("/", (request, response) -> hola());
-		post("/hola", (request, response) -> responder_saludo(request.queryParams("nombre_saludo")));
+		post("/hola", (request, response) -> getFisrtEmployee());
 		get("/Arquitectura", (request, response) -> "Hola Arquitectura");
 	}
 
@@ -22,6 +25,11 @@ public class Main {
 				+ "<input type='submit' value='Saluda'"
 				+ "</body>"
 				+ "</html>";
+	}
+	
+	private static String getFisrtEmployee() {
+		EmployeePresenter presenter = new EmployeePresenter(1);
+		return presenter.showEmployee(1);
 	}
 
 }
