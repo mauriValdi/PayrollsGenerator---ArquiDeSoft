@@ -15,7 +15,7 @@ public class EmployeePresenter {
 	public EmployeePresenter(int id) {		
 	}
 
-	public void newEmployee(String name, String address, String paymentClassification, double hourlyRate, double salary, double commissionRate)
+	public void newEmployee(String name, String address, int paymentClassification, double hourlyRate, double salary, double commissionRate)
 	{
 		Transaction addEmployeeTransaction = null;
 		Set<Integer> employeesIds = PayrollDatabase.globalPayrollDatabase.getAllEmployeeIds();
@@ -23,11 +23,11 @@ public class EmployeePresenter {
 		if(!employeesIds.isEmpty())
 			employeeId = employeesIds.toArray().length;
 		
-		if(paymentClassification == "Hourly")
+		if(paymentClassification == 1)
 			addEmployeeTransaction = new AddHourlyEmployeeTransaction(employeeId, name, address, hourlyRate);
-		if(paymentClassification == "Salaried")
+		if(paymentClassification == 2)
 			addEmployeeTransaction = new AddSalariedEmployeeTransaction(employeeId, name, address, salary);
-		if(paymentClassification == "Commissioned")
+		if(paymentClassification == 3)
 			addEmployeeTransaction = new AddCommissionedEmployeeTransaction(employeeId, name, address, salary , commissionRate);
 		
 		addEmployeeTransaction.execute();
