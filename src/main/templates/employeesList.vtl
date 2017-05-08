@@ -1,0 +1,33 @@
+#foreach( $Employee in $Employees )
+	<div>
+		<div>
+		<label>name: </label>
+		 $Employee.getName()
+		</div>	
+		<div>
+		<label>Address: </label>
+		 $Employee.getAddress()
+		</div>
+		<div>
+		<label>Hourly Rate: </label>
+		$Employee.getHourlyRate()
+		</div>	
+		<div>
+		<label>Salary: </label>
+		$Employee.getSalary()
+		</div>		
+		<div>
+		<label>Commission Rate: </label>
+		$Employee.getCommisionRate()
+		</div>	
+		<div>
+		<label>Payment Classification: </label>
+		$Employee.getPaymentClassificationString()
+		</div>	
+		<div>
+		<label>Schedule: </label>
+		$Employee.getPaymentScheduleString()
+		</div>
+	</div>
+	<br>
+#end

@@ -4,7 +4,6 @@ import payrollcasestudy.entities.Employee;
 import payrollcasestudy.presenter.employee.builders.EmployeeView;
 import payrollcasestudy.transactions.Transaction;
 import payrollcasestudy.transactions.add.*;
-
 import java.util.Iterator;
 import java.util.Set;
 
@@ -12,7 +11,7 @@ import payrollcasestudy.boundaries.*;
 
 public class EmployeePresenter {	
 	
-	public EmployeePresenter(int id) {		
+	public EmployeePresenter() {		
 	}
 
 	public void newEmployee(String name, String address, int paymentClassification, double hourlyRate, double salary, double commissionRate)
@@ -33,14 +32,14 @@ public class EmployeePresenter {
 		addEmployeeTransaction.execute();
 	}
 	
-	public String showEmployees(){	
-		EmployeeView view = new EmployeeView();
-		String employeesTable = "";
+	public Employee[] showEmployees(){		
 		Set<Integer> employeesIds = PayrollDatabase.globalPayrollDatabase.getAllEmployeeIds();
+		Employee[] employeesTable = new Employee[employeesIds.toArray().length];
+		int index = 0;
 		for (Iterator<Integer> it = employeesIds.iterator(); it.hasNext();) {
 			int employeeId = it.next();
-			Employee employee = PayrollDatabase.globalPayrollDatabase.getEmployee(employeeId);
-			employeesTable = employeesTable + employee.update(view);
+			employeesTable[index] = PayrollDatabase.globalPayrollDatabase.getEmployee(employeeId);
+			index++;
 		}
 		return employeesTable;
 	}

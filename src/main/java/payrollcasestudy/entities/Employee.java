@@ -100,35 +100,60 @@ public class Employee {
 		return employeeUnionAffiliation;
 	}
 	
-	public String update(Updatable update) {
-		String result = "";
-		result += update.startEmployee();
-		result += update.updateName(name);
-		result += update.updateAddress(address);
+	public String getPaymentClassificationString()
+	{
 		if(paymentClassification instanceof HourlyPaymentClassification)
-		{
-			result += update.updatePaymentClass("Hourly");
-			HourlyPaymentClassification hourlyPaymentClassification = (HourlyPaymentClassification) paymentClassification;
-			result += update.updateHourlyRate(Double.toString(hourlyPaymentClassification.getHourlyRate()));
-			result += update.updatePaymentSchedule("Weekly");
-		}
+			return "Hourly";	
 		if(paymentClassification instanceof SalariedClassification)
-		{
-			result += update.updatePaymentClass("Salaried");
-			SalariedClassification salariedClassification = (SalariedClassification) paymentClassification;
-			result += update.updateSalary(Double.toString(salariedClassification.getSalary()));
-			result += update.updatePaymentSchedule("Monthly");
+			return "Salaried";
+		if(paymentClassification instanceof CommissionedPaymentClassification)
+			return "Commissioned";	
+		return "";
+	}
+	
+	public String getPaymentScheduleString()
+	{
+		if(paymentClassification instanceof HourlyPaymentClassification)
+			return "Weekly";	
+		if(paymentClassification instanceof SalariedClassification)
+			return "Monthly";
+		if(paymentClassification instanceof CommissionedPaymentClassification)
+			return "Biweekly";	
+		return "";
+	}
+	
+	public double getHourlyRate()
+	{
+		if(paymentClassification instanceof HourlyPaymentClassification)
+		{			
+			HourlyPaymentClassification hourlyPaymentClassification = (HourlyPaymentClassification) paymentClassification;
+			return hourlyPaymentClassification.getHourlyRate();
+		}
+		return 0;
+	}
+	
+	public double getSalary()
+	{
+		if(paymentClassification instanceof HourlyPaymentClassification)
+		{			
+			HourlyPaymentClassification hourlyPaymentClassification = (HourlyPaymentClassification) paymentClassification;
+			return hourlyPaymentClassification.getHourlyRate();
 		}
 		if(paymentClassification instanceof CommissionedPaymentClassification)
-		{
-			result += update.updatePaymentClass("Commissioned");
+		{		
 			CommissionedPaymentClassification commissionedClassification = (CommissionedPaymentClassification) paymentClassification;
-			result += update.updateSalary(Double.toString(commissionedClassification.getMonthlySalary()));
-			result += update.updateComissionRate(Double.toString(commissionedClassification.getCommissionRate()));
-			result += update.updatePaymentSchedule("Biweekly");
-		}		
-		result += update.endEmployee();
-		return result;
+			return commissionedClassification.getMonthlySalary();			
+		}	
+		return 0;
 	}
-
+	
+	public double getCommisionRate()
+	{
+		if(paymentClassification instanceof HourlyPaymentClassification)
+		{			
+			CommissionedPaymentClassification commissionedClassification = (CommissionedPaymentClassification) paymentClassification;
+			return commissionedClassification.getCommissionRate();
+		}
+		return 0;
+	}	
 }
