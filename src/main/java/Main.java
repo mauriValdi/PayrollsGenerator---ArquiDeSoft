@@ -1,7 +1,7 @@
 import static spark.Spark.*;
 import java.util.HashMap;
 import spark.ModelAndView;
-import presenters.EmployeePresenter;
+import presenters.*;
 import spark.template.velocity.VelocityTemplateEngine;
 
 public class Main {	
@@ -30,14 +30,29 @@ public class Main {
 		post("/ViewEmployee", (request, response) -> {
 			view.clear();
 			EmployeePresenter presenter = new EmployeePresenter();
-			view.put("Employee", presenter.showASingleEmployee(Integer.parseInt(request.queryParams("id"))));
+			view.put("Employee", presenter.showASingleEmployee(Integer.parseInt(request.queryParams("employeeId"))));
 			return new ModelAndView(view, "/employeeView.vtl");
 		}, new VelocityTemplateEngine());	
 		
-		post("/CreatingEmployee", (request, response) -> updateEmployees(request.queryParams("name"), request.queryParams("address"), Integer.parseInt(request.queryParams("paymentClassification")), Double.parseDouble(request.queryParams("hourlyRate")), Double.parseDouble(request.queryParams("salary")), Double.parseDouble(request.queryParams("commissionRate"))));
-		get("/CreatingJohn", (request, response) -> updateEmployees("john", "address", 1, 12, 0, 0));
-		get("/CreatingHamster", (request, response) -> updateEmployees("Hamster", "address2", 3, 0, 200, 20));
+		post("/CreatingEmployee", (request, response) -> {
+			updateEmployees(request.queryParams("name"), request.queryParams("address"), Integer.parseInt(request.queryParams("paymentClassification")), Double.parseDouble(request.queryParams("hourlyRate")), Double.parseDouble(request.queryParams("salary")), Double.parseDouble(request.queryParams("commissionRate")));
+			response.redirect("/");
+			return null;
+		});
 		
+		post("/AddSaleReceipt", (request, response) -> {
+			SaleReceiptPresenter presenter = new SaleReceiptPresenter();
+			presenter.addSaleReceipt(Integer.parseInt(request.queryParams("employeeId")), Integer.parseInt(request.queryParams("year")), Integer.parseInt(request.queryParams("month")), Integer.parseInt(request.queryParams("day")), Integer.parseInt(request.queryParams("amount")));
+			response.redirect("/");
+			return null;
+		});
+		
+		post("/AddTimeCard", (request, response) -> {
+			TimeCardPresenter presenter = new TimeCardPresenter();
+			presenter.addTimeCard(Integer.parseInt(request.queryParams("employeeId")), Integer.parseInt(request.queryParams("year")), Integer.parseInt(request.queryParams("month")), Integer.parseInt(request.queryParams("day")), Integer.parseInt(request.queryParams("hours")));
+			response.redirect("/");
+			return null;
+		});
 	}
 	
 	private static String updateEmployees(String name, String address, int paymentClassification, double hourlyRate, double salary, double commissionRate) {
