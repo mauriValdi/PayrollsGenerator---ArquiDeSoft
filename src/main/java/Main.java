@@ -36,23 +36,35 @@ public class Main {
 		
 		post("/CreatingEmployee", (request, response) -> {
 			updateEmployees(request.queryParams("name"), request.queryParams("address"), Integer.parseInt(request.queryParams("paymentClassification")), Double.parseDouble(request.queryParams("hourlyRate")), Double.parseDouble(request.queryParams("salary")), Double.parseDouble(request.queryParams("commissionRate")));
-			response.redirect("/");
+			response.redirect("/ShowEmployees");
 			return null;
 		});
 		
 		post("/AddSaleReceipt", (request, response) -> {
 			SaleReceiptPresenter presenter = new SaleReceiptPresenter();
 			presenter.addSaleReceipt(Integer.parseInt(request.queryParams("employeeId")), Integer.parseInt(request.queryParams("year")), Integer.parseInt(request.queryParams("month")), Integer.parseInt(request.queryParams("day")), Integer.parseInt(request.queryParams("amount")));
-			response.redirect("/");
+			response.redirect("/ShowEmployees");
 			return null;
 		});
 		
 		post("/AddTimeCard", (request, response) -> {
 			TimeCardPresenter presenter = new TimeCardPresenter();
 			presenter.addTimeCard(Integer.parseInt(request.queryParams("employeeId")), Integer.parseInt(request.queryParams("year")), Integer.parseInt(request.queryParams("month")), Integer.parseInt(request.queryParams("day")), Integer.parseInt(request.queryParams("hours")));
-			response.redirect("/");
+			response.redirect("/ShowEmployees");
 			return null;
 		});
+		
+		get("/Pay", (request, response) -> {
+			view.clear();
+			return new ModelAndView(view, "/pay.vtl");
+		}, new VelocityTemplateEngine());
+		
+		post("/Payroll", (request, response) -> {
+			view.clear();
+			PaydayPresenter payrollPresenter = new PaydayPresenter();
+			view.put("Payroll", payrollPresenter.getPayroll(Integer.parseInt(request.queryParams("year")), Integer.parseInt(request.queryParams("month")), Integer.parseInt(request.queryParams("day"))));
+			return new ModelAndView(view, "/payroll.vtl");
+		}, new VelocityTemplateEngine());
 	}
 	
 	private static String updateEmployees(String name, String address, int paymentClassification, double hourlyRate, double salary, double commissionRate) {

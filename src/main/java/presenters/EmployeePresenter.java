@@ -44,6 +44,10 @@ public class EmployeePresenter {
 		return employeesTable;
 	}
 	
+	public Object[] getEmployeesIds(){			
+		return PayrollDatabase.globalPayrollDatabase.getAllEmployeeIds().toArray();
+	}
+	
 	public Employee showASingleEmployee(int employeeId)
 	{
 		return PayrollDatabase.globalPayrollDatabase.getEmployee(employeeId);

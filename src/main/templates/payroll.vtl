@@ -1,0 +1,21 @@
+#foreach( $PayCheck in $Payroll )
+	<div>
+		<div>
+			<label>Id: </label>
+			WorkInProgress
+		</div>			
+		<div>
+			<label>Gross Pay: </label>
+			$PayCheck.getGrossPay()
+		</div>			
+		<div>
+			<label>Deductions: </label>
+			$PayCheck.getDeductions()
+		</div>
+		<div>
+			<label>Net Pay: </label>
+			$PayCheck.getNetPay()
+		</div>
+	</div>
+	<br>
+#end
