@@ -17,7 +17,7 @@ public class PaydayPresenter {
 		Calendar payDate = new GregorianCalendar(year, month, day);
         PaydayTransaction paydayTransaction = new PaydayTransaction(payDate);
         paydayTransaction.execute();
-
+        
         Set<Integer> employeesIds = PayrollDatabase.globalPayrollDatabase.getAllEmployeeIds();
         PayCheck[] payroll = new PayCheck[employeesIds.toArray().length];
 		int index = 0;

@@ -1,4 +1,5 @@
 #foreach( $PayCheck in $Payroll )
+#if( $foo )
 	<div>
 		<div>
 			<label>Id: </label>
@@ -18,4 +19,25 @@
 		</div>
 	</div>
 	<br>
+#{else}
+<div>
+		<div>
+			<label>Id: </label>
+			WorkInProgress
+		</div>			
+		<div>
+			<label>Gross Pay: </label>
+			0
+		</div>			
+		<div>
+			<label>Deductions: </label>
+			0
+		</div>
+		<div>
+			<label>Net Pay: </label>
+			0
+		</div>
+	</div>
+	<br>
+#end
 #end
