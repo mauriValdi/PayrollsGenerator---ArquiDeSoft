@@ -25,6 +25,13 @@ public class Main {
 			EmployeePresenter presenter = new EmployeePresenter();
 			view.put("Employees", presenter.showEmployees());
 			return new ModelAndView(view, "/employeesList.vtl");
+		}, new VelocityTemplateEngine());
+		
+		post("/ViewEmployee", (request, response) -> {
+			view.clear();
+			EmployeePresenter presenter = new EmployeePresenter();
+			view.put("Employee", presenter.showASingleEmployee(Integer.parseInt(request.queryParams("id"))));
+			return new ModelAndView(view, "/employeeView.vtl");
 		}, new VelocityTemplateEngine());	
 		
 		post("/CreatingEmployee", (request, response) -> updateEmployees(request.queryParams("name"), request.queryParams("address"), Integer.parseInt(request.queryParams("paymentClassification")), Double.parseDouble(request.queryParams("hourlyRate")), Double.parseDouble(request.queryParams("salary")), Double.parseDouble(request.queryParams("commissionRate"))));

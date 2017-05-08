@@ -43,4 +43,9 @@ public class EmployeePresenter {
 		}
 		return employeesTable;
 	}
+	
+	public Employee showASingleEmployee(int employeeId)
+	{
+		return PayrollDatabase.globalPayrollDatabase.getEmployee(employeeId);
+	}
 }

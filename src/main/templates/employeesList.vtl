@@ -2,11 +2,11 @@
 	<div>
 		<div>
 		<label>name: </label>
-		 $Employee.getName()
+		$Employee.getName()
 		</div>	
 		<div>
 		<label>Address: </label>
-		 $Employee.getAddress()
+		$Employee.getAddress()
 		</div>
 		<div>
 		<label>Hourly Rate: </label>
@@ -27,6 +27,12 @@
 		<div>
 		<label>Schedule: </label>
 		$Employee.getPaymentScheduleString()
+		</div>
+		<div>
+		<form method='post' action='/ViewEmployee>
+			<input type='hidden' name='id' value= $Employee.getId()>
+			<input type='submit' value='Details'>
+		</form>
 		</div>
 	</div>
 	<br>

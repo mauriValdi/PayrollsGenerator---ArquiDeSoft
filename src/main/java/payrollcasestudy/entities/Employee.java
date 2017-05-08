@@ -134,10 +134,10 @@ public class Employee {
 	
 	public double getSalary()
 	{
-		if(paymentClassification instanceof HourlyPaymentClassification)
-		{			
-			HourlyPaymentClassification hourlyPaymentClassification = (HourlyPaymentClassification) paymentClassification;
-			return hourlyPaymentClassification.getHourlyRate();
+		if(paymentClassification instanceof SalariedClassification)
+		{		
+			SalariedClassification salariedClassification = (SalariedClassification) paymentClassification;
+			return salariedClassification.getSalary();
 		}
 		if(paymentClassification instanceof CommissionedPaymentClassification)
 		{		
@@ -149,11 +149,16 @@ public class Employee {
 	
 	public double getCommisionRate()
 	{
-		if(paymentClassification instanceof HourlyPaymentClassification)
+		if(paymentClassification instanceof CommissionedPaymentClassification)
 		{			
 			CommissionedPaymentClassification commissionedClassification = (CommissionedPaymentClassification) paymentClassification;
 			return commissionedClassification.getCommissionRate();
 		}
 		return 0;
-	}	
+	}
+	
+	public int getId()
+	{
+		return employeeId;
+	}
 }
