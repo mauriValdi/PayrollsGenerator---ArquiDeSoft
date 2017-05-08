@@ -1,11 +1,19 @@
 import static spark.Spark.*;
-
+import java.util.HashMap;
+import spark.ModelAndView;
 import presenters.EmployeePresenter;
+import spark.template.velocity.VelocityTemplateEngine;
 
-public class Main {
-
+public class Main {	
+	
 	public static void main(String[] args) {
-		get("/", (request, response) -> showEmployees());
+		//staticFileLocation("/public");
+		HashMap<String,Object> view = new HashMap<String,Object>();
+				
+		get("/", (request, response) -> {					
+			return new ModelAndView(view, "/newEmployee.vtl");
+		}, new VelocityTemplateEngine());		
+		
 		post("/CreatingEmployee", (request, response) -> updateEmployees(request.queryParams("name"), request.queryParams("address"), Integer.parseInt(request.queryParams("paymentClassification")), Double.parseDouble(request.queryParams("hourlyRate")), Double.parseDouble(request.queryParams("salary")), Double.parseDouble(request.queryParams("commissionRate"))));
 		get("/CreatingJohn", (request, response) -> updateEmployees("john", "address", 1, 12, 0, 0));
 		get("/CreatingHamster", (request, response) -> updateEmployees("Hamster", "address2", 3, 0, 200, 20));
