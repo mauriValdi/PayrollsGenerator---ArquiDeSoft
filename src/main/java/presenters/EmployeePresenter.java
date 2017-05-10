@@ -4,6 +4,8 @@ import payrollcasestudy.entities.Employee;
 import payrollcasestudy.presenter.employee.builders.EmployeeView;
 import payrollcasestudy.transactions.Transaction;
 import payrollcasestudy.transactions.add.*;
+
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -32,16 +34,8 @@ public class EmployeePresenter {
 		addEmployeeTransaction.execute();
 	}
 	
-	public Employee[] showEmployees(){		
-		Set<Integer> employeesIds = PayrollDatabase.globalPayrollDatabase.getAllEmployeeIds();
-		Employee[] employeesTable = new Employee[employeesIds.toArray().length];
-		int index = 0;
-		for (Iterator<Integer> it = employeesIds.iterator(); it.hasNext();) {
-			int employeeId = it.next();
-			employeesTable[index] = PayrollDatabase.globalPayrollDatabase.getEmployee(employeeId);
-			index++;
-		}
-		return employeesTable;
+	public Collection<Employee> showEmployees(){	
+		return PayrollDatabase.globalPayrollDatabase.getAllEmployees();
 	}
 	
 	public Object[] getEmployeesIds(){			
