@@ -1,9 +1,9 @@
 package presenters;
 
 import payrollcasestudy.entities.Employee;
-import payrollcasestudy.presenter.employee.builders.EmployeeView;
 import payrollcasestudy.transactions.Transaction;
 import payrollcasestudy.transactions.add.*;
+import updatables.SalariedEmployeeViewBuilder;
 
 import java.util.Collection;
 import java.util.Iterator;

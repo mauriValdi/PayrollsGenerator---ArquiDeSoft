@@ -1,6 +1,6 @@
-package payrollcasestudy.presenter.employee.builders;
+package updatables;
 
-public class EmployeeView implements Updatable{
+public class SalariedEmployeeViewBuilder implements Updatable{
 	public String startEmployee() {
 		return "<div>";
 	}
@@ -53,6 +53,10 @@ public class EmployeeView implements Updatable{
 				+ "<label>Payment Classification: </label>"
 				+ ""+paymentClass+""
 				+"</div>";		
+	}
+	
+	public String updateAddCart(String employeeId) {
+		return "";
 	}
 	
 	public String updatePaymentSchedule(String schedule)

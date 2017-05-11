@@ -1,4 +1,4 @@
-package payrollcasestudy.presenter.employee.builders;
+package updatables;
 
 public interface Updatable {
 	String updateName(String name);
@@ -8,6 +8,7 @@ public interface Updatable {
 	String updateComissionRate(String commissionRate);
 	String updatePaymentClass(String paymentClass);
 	String updatePaymentSchedule(String schedule);
+	String updateAddCart(String employeeId);
 	String startEmployee();
 	String endEmployee();
 }
