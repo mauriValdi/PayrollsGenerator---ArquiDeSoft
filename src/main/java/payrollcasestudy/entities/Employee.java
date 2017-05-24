@@ -15,23 +15,12 @@ public class Employee {
     private PaymentMethod paymentMethod;
     private int employeeId;
     private String name;
-    private String address;
-    private Updatable updatable;
-    
-    
-    public Updatable getUpdatable() {
-		return updatable;
-	}
-
-	public void setUpdatable(Updatable updatable) {
-		this.updatable = updatable;
-	}
-
+    private String address;    
+   
 	private UnionAffiliation employeeUnionAffiliation = UnionAffiliation.NO_AFFILIATION;;
 
     public Employee(int employeeId, String name, String address) {
-    	this.updatable = new SalariedEmployeeViewBuilder();
-        this.employeeId = employeeId;
+    	this.employeeId = employeeId;
         this.name = name;
         this.address = address;
     }

@@ -4,7 +4,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Set;
 
-import payrollcasestudy.boundaries.PayrollDatabase;
+import payrollcasestudy.boundaries.PayrollDatabaseOnMemory;
 import payrollcasestudy.entities.Employee;
 import payrollcasestudy.entities.PayCheck;
 import payrollcasestudy.transactions.PaydayTransaction;
@@ -16,9 +16,9 @@ public class PaydayPresenter {
 	{
 		Calendar payDate = new GregorianCalendar(year, month, day);
         PaydayTransaction paydayTransaction = new PaydayTransaction(payDate);
-        paydayTransaction.execute();
+        paydayTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
         
-        Set<Integer> employeesIds = PayrollDatabase.globalPayrollDatabase.getAllEmployeeIds();
+        Set<Integer> employeesIds = PayrollDatabaseOnMemory.globalPayrollDatabase.getAllEmployeeIds();
         PayCheck[] payroll = new PayCheck[employeesIds.toArray().length];
 		int index = 0;
 		for (Iterator<Integer> it = employeesIds.iterator(); it.hasNext();) {

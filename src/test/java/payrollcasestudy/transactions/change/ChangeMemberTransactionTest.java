@@ -4,6 +4,7 @@ import org.junit.Rule;
 import org.junit.Test;
 
 import payrollcasestudy.DatabaseResource;
+import payrollcasestudy.boundaries.PayrollDatabaseOnMemory;
 import payrollcasestudy.entities.Employee;
 import payrollcasestudy.entities.affiliations.UnionAffiliation;
 import payrollcasestudy.transactions.add.AddEmployeeTransaction;
@@ -23,11 +24,11 @@ public class ChangeMemberTransactionTest {
         int memberId = 7734;
         AddEmployeeTransaction addEmployeeTransaction =
                 new AddHourlyEmployeeTransaction(employeeId, "Bill", "Home", 15.25);
-        addEmployeeTransaction.execute();
+        addEmployeeTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
 
         ChangeMemberTransaction changeMemberTransaction =
                 new ChangeMemberTransaction(employeeId, memberId, 99.42);
-        changeMemberTransaction.execute();
+        changeMemberTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
 
         Employee employee = databaseResource.getInstance().getEmployee(employeeId);
         assertThat(employee.getUnionAffiliation(), is(notNullValue()));

@@ -15,15 +15,14 @@ public class EmployeePresenter {
 	
 	public EmployeePresenter() {		
 	}
-
+	
 	public void newEmployee(String name, String address, int paymentClassification, double hourlyRate, double salary, double commissionRate)
 	{
 		Transaction addEmployeeTransaction = null;
-		Set<Integer> employeesIds = PayrollDatabase.globalPayrollDatabase.getAllEmployeeIds();
+		Set<Integer> employeesIds = PayrollDatabaseOnMemory.globalPayrollDatabase.getAllEmployeeIds();
 		int employeeId = 0;
 		if(!employeesIds.isEmpty())
 			employeeId = employeesIds.toArray().length;
-		
 		if(paymentClassification == 1)
 			addEmployeeTransaction = new AddHourlyEmployeeTransaction(employeeId, name, address, hourlyRate);
 		if(paymentClassification == 2)
@@ -31,19 +30,23 @@ public class EmployeePresenter {
 		if(paymentClassification == 3)
 			addEmployeeTransaction = new AddCommissionedEmployeeTransaction(employeeId, name, address, salary , commissionRate);
 		
-		addEmployeeTransaction.execute();
+		addEmployeeTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
+		
+		Repository dbrepo = new JDBCPersistance();
+		dbrepo.addEmployee(employeeId, new Employee(employeeId,name,address));
+		
 	}
 	
 	public Collection<Employee> showEmployees(){	
-		return PayrollDatabase.globalPayrollDatabase.getAllEmployees();
+		return PayrollDatabaseOnMemory.globalPayrollDatabase.getAllEmployees();
 	}
 	
 	public Object[] getEmployeesIds(){			
-		return PayrollDatabase.globalPayrollDatabase.getAllEmployeeIds().toArray();
+		return PayrollDatabaseOnMemory.globalPayrollDatabase.getAllEmployeeIds().toArray();
 	}
 	
 	public Employee showASingleEmployee(int employeeId)
 	{
-		return PayrollDatabase.globalPayrollDatabase.getEmployee(employeeId);
+		return PayrollDatabaseOnMemory.globalPayrollDatabase.getEmployee(employeeId);
 	}
 }

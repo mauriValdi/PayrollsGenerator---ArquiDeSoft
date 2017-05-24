@@ -3,6 +3,7 @@ package payrollcasestudy.transactions.change;
 import org.junit.Rule;
 import org.junit.Test;
 import payrollcasestudy.DatabaseResource;
+import payrollcasestudy.boundaries.PayrollDatabaseOnMemory;
 import payrollcasestudy.entities.Employee;
 import payrollcasestudy.transactions.add.AddHourlyEmployeeTransaction;
 
@@ -19,10 +20,12 @@ public class ChangeNameTransactionTest {
         int employeeId = 2;
         AddHourlyEmployeeTransaction addEmployeeTransaction =
                 new AddHourlyEmployeeTransaction(employeeId, "Bill", "Home", 15.25);
-        addEmployeeTransaction.execute();
+        addEmployeeTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
+
 
         ChangeNameTransaction changeNameTransaction = new ChangeNameTransaction(employeeId, "Bob");
-        changeNameTransaction.execute();
+        changeNameTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
+
 
         Employee employee = databaseResource.getInstance().getEmployee(employeeId);
         assertThat(employee.getName(), is("Bob"));
