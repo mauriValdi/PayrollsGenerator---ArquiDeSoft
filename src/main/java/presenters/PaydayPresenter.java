@@ -14,7 +14,7 @@ public class PaydayPresenter {
 	{}
 	public PayCheck[] getPayroll(int year, int month, int day)
 	{
-		Calendar payDate = new GregorianCalendar(year, month, day);
+		Calendar payDate = new GregorianCalendar(year, month - 1, day);
         PaydayTransaction paydayTransaction = new PaydayTransaction(payDate);
         paydayTransaction.execute();
         

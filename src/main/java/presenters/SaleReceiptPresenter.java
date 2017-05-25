@@ -9,7 +9,7 @@ public class SaleReceiptPresenter {
 	{}
 	public void addSaleReceipt(int employeeId, int year, int month, int day, int amount)
 	{
-		Calendar date = new GregorianCalendar(year, month, day);
+		Calendar date = new GregorianCalendar(year, month - 1, day);
         Transaction salesReceiptTransaction = new AddSalesReceiptTransaction(date, amount, employeeId);
         salesReceiptTransaction.execute();
 	}

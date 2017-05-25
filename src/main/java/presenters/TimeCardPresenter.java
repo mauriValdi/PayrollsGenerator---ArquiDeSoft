@@ -9,7 +9,7 @@ public class TimeCardPresenter {
 	{}
 	public void addTimeCard(int employeeId, int year, int month, int day, int hours)
 	{
-		Calendar date = new GregorianCalendar(year, month, day);
+		Calendar date = new GregorianCalendar(year, month - 1, day);
         Transaction timeCardTransaction = new AddTimeCardTransaction(date, hours, employeeId);
         timeCardTransaction.execute();
 	}
