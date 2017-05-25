@@ -2,33 +2,43 @@
 <html>
 	<head>
 		<title>Payroll Generator</title>
-		<link rel="stylesheet" type="text/css" href="style.css">
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	</head>
 	<body>
-		<form method='post' action='/CreatingEmployee'>		 
-			<label>Name:</label>		 
-			<input type='text' name='name'>
-			<br>
-			<label>Address:</label>	 
-			<input type='text' name='address'>
-			<br>
-			<br>
-			<label>Payment Classification:</label>	 
-			<input type='radio' name='paymentClassification' value='1'> Hourly
-			<input type='radio' name='paymentClassification' value='2'> Salaried
-			<input type='radio' name='paymentClassification' value='3'> Commissioned
-			<br>
-			<label>Hourly Rate:</label>
-			<input type='number' name='hourlyRate' value=0>
-			<br>
-			<label>Salary:</label>
-			<input type='number' name='salary' value=0>
-			<br>
-			<label>Commission Rate:</label> 
-			<input type='number' name='commissionRate' value=0>       
-			<br>
-			<br>
-			<input type='submit' class="mainmenu" value='Create'>
+		<form method='post' action='/CreatingEmployee'>
+			<div class="w3-card-4" style="margin:16%; margin-top:5%">
+				<header class="w3-container w3-deep-orange">
+					<h1>New Employee</h1>
+				</header>					 
+				<div class="w3-container">				 
+					<label>Name:</label>		 
+					<input class="w3-input w3-border" type='text' name='name' placeholder="Name">
+					<label>Address:</label>	 
+					<input class="w3-input w3-border" type='text' name='address' placeholder="Address">
+					<label>Payment Classification:</label>
+					<div class="w3-row-padding">
+						<div class="w3-third">
+    						<input class="w3-radio" type='radio' name='paymentClassification' value='1'> Hourly
+  						</div>
+  						<div class="w3-third">
+    						<input class="w3-radio" type='radio' name='paymentClassification' value='2'> Salaried
+  						</div>
+  						<div class="w3-third">
+    						<input class="w3-radio" type='radio' name='paymentClassification' value='3'> Commissioned
+  						</div>
+					</div>
+					<label>Hourly Rate:</label>
+					<input class="w3-input w3-border" type='number' name='hourlyRate' value=0 placeholder="Hourly Rate">
+					<label>Salary:</label>
+					<input class="w3-input w3-border" type='number' name='salary' value=0 placeholder="Salary">
+					<label>Commission Rate:</label> 
+					<input class="w3-input w3-border" type='number' name='commissionRate' value=0 placeholder="Commission Rate">
+					<br>
+				</div>
+				<footer class="w3-container w3-deep-orange">
+  						<input type='submit' class="w3-button w3-deep-orange w3-hover-black w3-block" value='Create'>
+				</footer>					
+			</div>
 		</form>
 	</body>
 </html>

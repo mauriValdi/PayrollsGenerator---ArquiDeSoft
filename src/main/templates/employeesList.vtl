@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<title>Employees</title>
-		<link rel="stylesheet" type="text/css" href="style.css"
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	</head>
 	<body>
 		#foreach( $Employee in $Employees )
@@ -18,7 +18,7 @@
 				<div>
 					<form method='post' action='/ViewEmployee'>
 						<input type='hidden' name='employeeId' value= $Employee.getId()>
-						<input type='submit' class="mainmenu" value='Details'>
+						<input type='submit' class="w3-button w3-black w3-hover-aqua w3-block" value='Details'>
 					</form>
 				</div>
 			</div>
