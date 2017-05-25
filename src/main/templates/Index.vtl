@@ -1,18 +1,21 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <title>Payrolls</title>
-    <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'>
-  </head>
-  <body>
-    <form method='get' action='/NewEmployee'>	
-		<input type='submit' value='Create an employee'>
-	</form>
-	<form method='get' action='/ShowEmployees'>	
-		<input type='submit' value='Employees list'>
-	</form>
-	<form method='get' action='/Pay'>	
-		<input type='submit' value='Pay'>
-	</form>
-  </body>
+	<head>
+		<title>Payroll Generator</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+	    <h1 style="text-align:center; margin-top:15%">Payroll Generator</h1>
+	    <div style="margin:25%; margin-top:5%">
+		    <form method='get' action='/NewEmployee'>	
+				<input type='submit' class="mainmenu" value='Create an employee'>
+			</form>
+			<form method='get' action='/ShowEmployees'>	
+				<input type='submit' class="mainmenu" value='Employees list'>
+			</form>
+			<form method='get' action='/Pay'>	
+				<input type='submit' class="mainmenu" value='Pay'>
+			</form>
+		</div>
+	</body>
 </html>

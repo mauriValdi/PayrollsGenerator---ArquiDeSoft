@@ -1,19 +1,28 @@
-#foreach( $Employee in $Employees )
-	<div>
-		<div>
-			<label>name: </label>
-			$Employee.getName()
-		</div>			
-		<div>
-			<label>Payment Classification: </label>
-			$Employee.getPaymentClassificationString()
-		</div>			
-		<div>
-			<form method='post' action='/ViewEmployee'>
-				<input type='hidden' name='employeeId' value= $Employee.getId()>
-				<input type='submit' value='Details'>
-			</form>
-		</div>
-	</div>
-	<br>
-#end
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Employees</title>
+		<link rel="stylesheet" type="text/css" href="style.css"
+	</head>
+	<body>
+		#foreach( $Employee in $Employees )
+			<div>
+				<div>
+					<label>name: </label>
+					$Employee.getName()
+				</div>			
+				<div>
+					<label>Payment Classification: </label>
+					$Employee.getPaymentClassificationString()
+				</div>			
+				<div>
+					<form method='post' action='/ViewEmployee'>
+						<input type='hidden' name='employeeId' value= $Employee.getId()>
+						<input type='submit' class="mainmenu" value='Details'>
+					</form>
+				</div>
+			</div>
+			<br>
+		#end
+	</body>
+</html>

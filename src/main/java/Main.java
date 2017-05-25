@@ -7,7 +7,7 @@ import spark.template.velocity.VelocityTemplateEngine;
 public class Main {	
 	
 	public static void main(String[] args) {
-		//staticFileLocation("/public");
+		//staticFileLocation("/templates");
 		HashMap<String,Object> view = new HashMap<String,Object>();
 		
 		get("/", (request, response) -> {

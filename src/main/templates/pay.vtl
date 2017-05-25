@@ -1,9 +1,18 @@
-<form method='post' action='/Payroll'>		 
-	<label>Year:</label>
-	<input type="number" name="year">
-	<label>Month:</label>
-	<input type='number' name='month' min="1" max="12" value=1>
-	<label>Day:</label>
-	<input type="number" name="day" min="1" max="31" value=1>
-	<input type='submit' value='Pay'>
-</form>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Payroll Generator</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+		<form method='post' action='/Payroll'>		 
+			<label>Year:</label>
+			<input type="number" name="year">
+			<label>Month:</label>
+			<input type='number' name='month' min="1" max="12" value=1>
+			<label>Day:</label>
+			<input type="number" name="day" min="1" max="31" value=1>
+			<input type='submit' class="mainmenu" value='Pay'>
+		</form>
+	</body>
+</html>

@@ -1,66 +1,75 @@
-<div>
-	<div>
-		<label>name: </label>
-		$Employee.getName()
-	</div>	
-	<div>
-		<label>Address: </label>
-		$Employee.getAddress()
-	</div>
-	<div>
-		<label>Hourly Rate: </label>
-		$Employee.getHourlyRate()
-	</div>	
-	<div>
-		<label>Salary: </label>
-		$Employee.getSalary()
-	</div>		
-	<div>
-		<label>Commission Rate: </label>
-		$Employee.getCommisionRate()
-	</div>	
-	<div>
-		<label>Payment Classification: </label>
-		$Employee.getPaymentClassificationString()
-	</div>	
-	<div>
-		<label>Schedule: </label>
-		$Employee.getPaymentScheduleString()
-	</div>
-</div>
-<div>
-	#if($Employee.getPaymentClassificationString() == "Hourly")
-		<h3>Add a time card:</h3>
-		<form method='post' action='/AddTimeCard'>
-			<label>Year:</label>
-			<input type="number" name="year">
-			<label>Month:</label>
-			<input type='number' name='month' min="1" max="12" value=1>
-			<label>Day:</label>
-			<input type="number" name="day" min="1" max="31" value = 1>
-			<br>
-			<label>Hours:</label>
-			<input type='number' name='hours' value=0> 
-			<input type='hidden' name='employeeId' value= $Employee.getId()>
-			<br>
-			<input type='submit' value='Add'>
-		</form>
-	#end
-	#if($Employee.getPaymentClassificationString() == "Commissioned")
-		<h3>Add a sale receipt:</h3>
-		<form method='post' action='/AddSaleReceipt'>
-			<label>Year:</label>
-			<input type="number" name="year">
-			<label>Month:</label>
-			<input type='number' name='month' min="1" max="12" value=1>
-			<label>Day:</label>
-			<input type="number" name="day" min="1" max="31" value=1>
-			<br>
-			<label>Amount:</label>
-			<input type='number' name='amount' value=0> 
-			<input type='hidden' name='employeeId' value= $Employee.getId()>
-			<br>
-			<input type='submit' value='Add'>
-		</form>
-	#end
-</div>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Employees</title>
+		<link rel="stylesheet" type="text/css" href="style.css"
+	</head>
+	<body>
+		<div>
+			<div>
+				<label>name: </label>
+				$Employee.getName()
+			</div>	
+			<div>
+				<label>Address: </label>
+				$Employee.getAddress()
+			</div>
+			<div>
+				<label>Hourly Rate: </label>
+				$Employee.getHourlyRate()
+			</div>	
+			<div>
+				<label>Salary: </label>
+				$Employee.getSalary()
+			</div>		
+			<div>
+				<label>Commission Rate: </label>
+				$Employee.getCommisionRate()
+			</div>	
+			<div>
+				<label>Payment Classification: </label>
+				$Employee.getPaymentClassificationString()
+			</div>	
+			<div>
+				<label>Schedule: </label>
+				$Employee.getPaymentScheduleString()
+			</div>
+		</div>
+		<div>
+			#if($Employee.getPaymentClassificationString() == "Hourly")
+				<h3>Add a time card:</h3>
+				<form method='post' action='/AddTimeCard'>
+					<label>Year:</label>
+					<input type="number" name="year">
+					<label>Month:</label>
+					<input type='number' name='month' min="1" max="12" value=1>
+					<label>Day:</label>
+					<input type="number" name="day" min="1" max="31" value = 1>
+					<br>
+					<label>Hours:</label>
+					<input type='number' name='hours' value=0> 
+					<input type='hidden' name='employeeId' value= $Employee.getId()>
+					<br>
+					<input type='submit' class="mainmenu" value='Add'>
+				</form>
+			#end
+			#if($Employee.getPaymentClassificationString() == "Commissioned")
+				<h3>Add a sale receipt:</h3>
+				<form method='post' action='/AddSaleReceipt'>
+					<label>Year:</label>
+					<input type="number" name="year">
+					<label>Month:</label>
+					<input type='number' name='month' min="1" max="12" value=1>
+					<label>Day:</label>
+					<input type="number" name="day" min="1" max="31" value=1>
+					<br>
+					<label>Amount:</label>
+					<input type='number' name='amount' value=0> 
+					<input type='hidden' name='employeeId' value= $Employee.getId()>
+					<br>
+					<input type='submit' class="mainmenu" value='Add'>
+				</form>
+			#end
+		</div>
+	</body>
+</html>

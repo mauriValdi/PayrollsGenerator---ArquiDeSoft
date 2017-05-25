@@ -1,43 +1,52 @@
-#foreach( $PayCheck in $Payroll )
-#if( $foo )
-	<div>
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Payroll Generator</title>
+		<link rel="stylesheet" type="text/css" href="style.css">
+	</head>
+	<body>
+		#foreach( $PayCheck in $Payroll )
+		#if( $foo )
+			<div>
+				<div>
+					<label>Id: </label>
+					WorkInProgress
+				</div>			
+				<div>
+					<label>Gross Pay: </label>
+					$PayCheck.getGrossPay()
+				</div>			
+				<div>
+					<label>Deductions: </label>
+					$PayCheck.getDeductions()
+				</div>
+				<div>
+					<label>Net Pay: </label>
+					$PayCheck.getNetPay()
+				</div>
+			</div>
+			<br>
+		#{else}
 		<div>
-			<label>Id: </label>
-			WorkInProgress
-		</div>			
-		<div>
-			<label>Gross Pay: </label>
-			$PayCheck.getGrossPay()
-		</div>			
-		<div>
-			<label>Deductions: </label>
-			$PayCheck.getDeductions()
-		</div>
-		<div>
-			<label>Net Pay: </label>
-			$PayCheck.getNetPay()
-		</div>
-	</div>
-	<br>
-#{else}
-<div>
-		<div>
-			<label>Id: </label>
-			WorkInProgress
-		</div>			
-		<div>
-			<label>Gross Pay: </label>
-			0
-		</div>			
-		<div>
-			<label>Deductions: </label>
-			0
-		</div>
-		<div>
-			<label>Net Pay: </label>
-			0
-		</div>
-	</div>
-	<br>
-#end
-#end
+				<div>
+					<label>Id: </label>
+					WorkInProgress
+				</div>			
+				<div>
+					<label>Gross Pay: </label>
+					0
+				</div>			
+				<div>
+					<label>Deductions: </label>
+					0
+				</div>
+				<div>
+					<label>Net Pay: </label>
+					0
+				</div>
+			</div>
+			<br>
+		#end
+		#end
+	</body>
+</html>
