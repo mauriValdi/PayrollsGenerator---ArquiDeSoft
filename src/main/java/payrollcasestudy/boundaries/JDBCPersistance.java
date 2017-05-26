@@ -1,7 +1,7 @@
 package payrollcasestudy.boundaries;
 
 
-import java.awt.List;
+import java.util.List;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.util.Set;
 
@@ -37,6 +38,7 @@ public class JDBCPersistance implements Repository {
 	
 	/** The name of the table we are testing with */
 	private final String tableName = "JDBC_TEST";
+	
 	
 	/**
 	 * Get a new database connection
@@ -122,17 +124,78 @@ public class JDBCPersistance implements Repository {
 			return;
 		}
 	}
+	
+	
 
 	@Override
 	public void addEmployee(int employeeId, Employee employee) {
-		// TODO Auto-generated method stub
+		Connection jdbcConnection = null;
+		try {
+			jdbcConnection = this.getConnection();
+			System.out.println("Connected to database");
+		} catch (SQLException e) {
+			System.out.println("ERROR: Could not connect to the database");
+			e.printStackTrace();
+			return;
+		}
 		
+		try {
+			String addEmployeeQuery =
+					"INSERT INTO book (title, author, price) VALUES (?, ?, ?)"
+					;
+
+	        PreparedStatement statement = jdbcConnection.prepareStatement(addEmployeeQuery);
+	        statement.setInt(1, employee.getId());
+	        statement.setString(2, employee.getName());
+	        statement.setString(3, employee.getAddress());
+	        boolean rowInserted = statement.executeUpdate() > 0;
+	        statement.close();
+		} catch(SQLException exception){
+			System.out.println("ERROR: Could not add the employee");
+			exception.printStackTrace();
+			return;
+		}
+		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public List getEmployees() {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Employee> getEmployees() {
+		Connection jdbcConnection = null;
+		try {
+			jdbcConnection = this.getConnection();
+			System.out.println("Connected to database");
+		} catch (SQLException e) {
+			System.out.println("ERROR: Could not connect to the database");
+			e.printStackTrace();
+			return null;
+		}
+		
+		List<Employee> employeeList = new ArrayList<Employee>();
+        
+        String jdbcListQuery = "SELECT * FROM employee";
+         
+         
+        Statement statement;
+		ResultSet resultSet;
+		try {
+			statement = jdbcConnection.createStatement();
+			resultSet = statement.executeQuery(jdbcListQuery);
+			 
+			while (resultSet.next()) {
+			    int id = resultSet.getInt("book_id");
+			    String name = resultSet.getString("title");
+			    String address = resultSet.getString("author");
+			    
+			    Employee employee = new Employee(id, name, address);
+			    employeeList.add(employee);
+			    resultSet.close();
+				statement.close();
+			}
+		} catch (SQLException e) {
+			System.out.println("ERROR: Could not read from the database");
+			e.printStackTrace();
+		}        
+        return employeeList;
 	}
 
 	@Override
