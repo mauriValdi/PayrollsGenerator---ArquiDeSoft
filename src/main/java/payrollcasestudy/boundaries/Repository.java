@@ -14,4 +14,5 @@ public interface Repository {
 	void addUnionMember(int memberId, Employee employee);
 	Employee getUnionMember(int memberId);
 	void deleteEmployee(int employeeId);
+	void run();
 }

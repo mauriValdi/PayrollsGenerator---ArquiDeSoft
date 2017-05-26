@@ -58,6 +58,14 @@ public class PayrollDatabaseOnMemory implements Repository{
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public void run() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
     
     
 }

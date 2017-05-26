@@ -13,52 +13,120 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Properties;
 import java.util.Set;
 
 import payrollcasestudy.entities.Employee;
 
 public class JDBCPersistance implements Repository {
 
+	/** The name of the MySQL account to use (or empty for anonymous) */
+	private final String userName = "root";
+
+	/** The password for the MySQL account (or empty for anonymous) */
+	private final String password = "";
+
+	/** The name of the computer running MySQL */
+	private final String serverName = "localhost";
+
+	/** The port of the MySQL server (default is 3306) */
+	private final int portNumber = 3306;
+
+	/** The name of the database we are testing with (this default is installed with MySQL) */
+	private final String dbName = "test";
+	
+	/** The name of the table we are testing with */
+	private final String tableName = "JDBC_TEST";
+	
+	/**
+	 * Get a new database connection
+	 * 
+	 * @return
+	 * @throws SQLException
+	 */
+	public Connection getConnection() throws SQLException {
+		Connection conn = null;
+		Properties connectionProps = new Properties();
+		connectionProps.put("user", this.userName);
+		connectionProps.put("password", this.password);
+
+		conn = DriverManager.getConnection("jdbc:mysql://"
+				+ this.serverName + ":" + this.portNumber + "/" + this.dbName,
+				connectionProps);
+
+		return conn;
+	}
+
+	/**
+	 * Run a SQL command which does not return a recordset:
+	 * CREATE/INSERT/UPDATE/DELETE/DROP/etc.
+	 * 
+	 * @throws SQLException If something goes wrong
+	 */
+	public boolean executeUpdate(Connection conn, String command) throws SQLException {
+	    Statement stmt = null;
+	    try {
+	        stmt = conn.createStatement();
+	        stmt.executeUpdate(command); // This will throw a SQLException if it fails
+	        return true;
+	    } finally {
+
+	    	// This will run whether we throw an exception or not
+	        if (stmt != null) { stmt.close(); }
+	    }
+	}
+	
+	/**
+	 * Connect to MySQL and do some stuff.
+	 */
+	public void run() {
+
+		// Connect to MySQL
+		Connection conn = null;
+		try {
+			conn = this.getConnection();
+			System.out.println("Connected to database");
+		} catch (SQLException e) {
+			System.out.println("ERROR: Could not connect to the database");
+			e.printStackTrace();
+			return;
+		}
+
+		// Create a table
+		try {
+		    String createString =
+			        "CREATE TABLE " + this.tableName + " ( " +
+			        "ID INTEGER NOT NULL, " +
+			        "NAME varchar(40) NOT NULL, " +
+			        "STREET varchar(40) NOT NULL, " +
+			        "CITY varchar(20) NOT NULL, " +
+			        "STATE char(2) NOT NULL, " +
+			        "ZIP char(5), " +
+			        "PRIMARY KEY (ID))";
+			this.executeUpdate(conn, createString);
+			System.out.println("Created a table");
+	    } catch (SQLException e) {
+			System.out.println("ERROR: Could not create the table");
+			e.printStackTrace();
+			return;
+		}
+		
+		// Drop the table
+		try {
+		    String dropString = "DROP TABLE " + this.tableName;
+			this.executeUpdate(conn, dropString);
+			System.out.println("Dropped the table");
+	    } catch (SQLException e) {
+			System.out.println("ERROR: Could not drop the table");
+			e.printStackTrace();
+			return;
+		}
+	}
+
 	@Override
 	public void addEmployee(int employeeId, Employee employee) {
+		// TODO Auto-generated method stub
 		
-		 try {
-			Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-			 String URL = "jdbc:odbc:dbname";
-			 Connection dbConn = DriverManager.getConnection(URL, "user", "passw");
-			 ByteArrayOutputStream baos = new ByteArrayOutputStream();
-			 ObjectOutputStream oos = new ObjectOutputStream(baos);
-			 oos.writeObject(employee);
-			 byte[] employeeAsBytes = baos.toByteArray();
-			 PreparedStatement pstmt = dbConn.prepareStatement("INSERT INTO EMPLOYEE (emp) VALUES(?)");
-			 ByteArrayInputStream bais = new ByteArrayInputStream(employeeAsBytes);
-			 pstmt.setBinaryStream(1, bais, employeeAsBytes.length);
-			 pstmt.executeUpdate();
-			 pstmt.close();
-			 //READ EMPLOYEES
-			 Statement stmt = dbConn.createStatement();
-			 ResultSet rs = stmt.executeQuery("SELECT emp FROM Employee");
-			 while (rs.next()) {
-				 byte[] st = (byte[]) rs.getObject(1);
-			     ByteArrayInputStream baip = new ByteArrayInputStream(st);
-			     ObjectInputStream ois = new ObjectInputStream(baip);
-			     Employee emp = (Employee) ois.readObject();
-			     System.out.println("EMPLOYEE NAME "+emp.getName()+"   ID    "+emp.getId());
-			 }
-			 
-			 stmt.close();
-			 rs.close();
-			 dbConn.close();
-		} catch (ClassNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 
 	@Override
@@ -102,5 +170,9 @@ public class JDBCPersistance implements Repository {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	/**
+	 * Connect to the DB and do some stuff
+	 */
 
 }

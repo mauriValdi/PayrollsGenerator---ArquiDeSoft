@@ -33,6 +33,7 @@ public class EmployeePresenter {
 		addEmployeeTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
 		
 		Repository dbrepo = new JDBCPersistance();
+		dbrepo.run();
 		dbrepo.addEmployee(employeeId, new Employee(employeeId,name,address));
 		
 	}
