@@ -5,24 +5,22 @@
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	</head>
 	<body>
-		#foreach( $Employee in $Employees )
-			<div>
-				<div>
-					<label>name: </label>
-					$Employee.getName()
-				</div>			
-				<div>
-					<label>Payment Classification: </label>
-					$Employee.getPaymentClassificationString()
-				</div>			
-				<div>
+		<div class="w3-row">
+			#foreach( $Employee in $Employees )			
+				<div class="w3-quarter w3-border">
+					<header class="w3-container w3-deep-orange">
+						<h3>$Employee.getName()</h3>
+					</header>					 
+					<div class="w3-container w3-center" style="height:50px;">				 
+						<label>Payment Classification: </label><br>
+						$Employee.getPaymentClassificationString()
+					</div>
 					<form method='post' action='/ViewEmployee'>
 						<input type='hidden' name='employeeId' value= $Employee.getId()>
-						<input type='submit' class="w3-button w3-black w3-hover-aqua w3-block" value='Details'>
-					</form>
-				</div>
-			</div>
-			<br>
-		#end
+						<input type='submit' class="w3-button w3-black w3-hover-deep-orange w3-block" value='Details'>
+					</form>					
+				</div>			
+			#end
+		<div>
 	</body>
 </html>

@@ -4,15 +4,25 @@
 		<title>Payroll Generator</title>
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	</head>
-	<body>
-		<form method='post' action='/Payroll'>		 
-			<label>Year:</label>
-			<input type="number" name="year">
-			<label>Month:</label>
-			<input type='number' name='month' min="1" max="12" value=1>
-			<label>Day:</label>
-			<input type="number" name="day" min="1" max="31" value=1>
-			<input type='submit' class="w3-button w3-black w3-hover-aqua w3-block" value='Pay'>
+	<body>		
+		<form method='post' action='/Payroll'>
+			<div class="w3-card-4" style="margin:16%; margin-top:5%">
+				<header class="w3-container w3-deep-orange">
+					<h1>Date</h1>
+				</header>					 
+				<div class="w3-container">				 
+					<label>Year:</label>
+					<input class="w3-input w3-border" type="number" name="year">
+					<label>Month:</label>
+					<input class="w3-input w3-border" type='number' name='month' min="1" max="12" value=1>
+					<label>Day:</label>
+					<input class="w3-input w3-border" type="number" name="day" min="1" max="31" value=1>
+					<br>
+				</div>
+				<footer class="w3-container w3-deep-orange">
+  						<input type='submit' class="w3-button w3-deep-orange w3-hover-black w3-block" value='Paycheck'>
+				</footer>					
+			</div>
 		</form>
 	</body>
 </html>

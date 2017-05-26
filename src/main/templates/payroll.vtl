@@ -4,14 +4,9 @@
 		<title>Payroll Generator</title>
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	</head>
-	<body>
-		#foreach( $PayCheck in $Payroll )
+	<body>		
 		#if( $foo )
-			<div>
-				<div>
-					<label>Id: </label>
-					WorkInProgress
-				</div>			
+			<div>						
 				<div>
 					<label>Gross Pay: </label>
 					$PayCheck.getGrossPay()
@@ -27,11 +22,7 @@
 			</div>
 			<br>
 		#{else}
-		<div>
-				<div>
-					<label>Id: </label>
-					WorkInProgress
-				</div>			
+			<div>							
 				<div>
 					<label>Gross Pay: </label>
 					0
