@@ -60,7 +60,7 @@ public class PayrollDatabaseOnMemory implements Repository{
 	}
 
 	@Override
-	public void run() {
+	public void testDataBase() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -2,11 +2,6 @@ package payrollcasestudy.boundaries;
 
 
 import java.util.List;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -14,6 +9,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
@@ -67,7 +63,7 @@ public class JDBCPersistance implements Repository {
 	/**
 	 * Connect to MySQL and do some stuff.
 	 */
-	public void run() {
+	public void testDataBase() {
 
 		// Connect to MySQL
 		Connection conn = null;
@@ -116,15 +112,7 @@ public class JDBCPersistance implements Repository {
 	@Override
 	public void addEmployee(int employeeId, Employee employee) {
 		Connection jdbcConnection = null;
-		try {
-			jdbcConnection = this.getConnection();
-			System.out.println("Connected to database");
-		} catch (SQLException e) {
-			System.out.println("ERROR: Could not connect to the database");
-			e.printStackTrace();
-			return;
-		}
-		
+		jdbcConnection = connectDB(jdbcConnection);	
 		try {
 			String addEmployeeQuery =
 					"INSERT INTO employee (id, name, address, id_payClass) VALUES (?, ?, ?, ?)"
@@ -135,7 +123,7 @@ public class JDBCPersistance implements Repository {
 	        statement.setString(2, employee.getName());
 	        statement.setString(3, employee.getAddress());
 	        statement.setInt(4, employee.getId());
-	        boolean rowInserted = statement.executeUpdate() > 0;
+	        statement.executeUpdate();
 	        statement.close();
 		} catch(SQLException exception){
 			System.out.println("ERROR: Could not add the employee");
@@ -145,19 +133,23 @@ public class JDBCPersistance implements Repository {
 		// TODO Auto-generated method stub
 	}
 
-	@Override
-	public List<Employee> getEmployees() {
-		Connection jdbcConnection = null;  
-        Statement statement;
-		ResultSet resultSet;
+	private Connection connectDB(Connection jdbcConnection) {
 		try {
 			jdbcConnection = this.getConnection();
 			System.out.println("Connected to database");
 		} catch (SQLException e) {
 			System.out.println("ERROR: Could not connect to the database");
 			e.printStackTrace();
-			return null;
 		}
+		return jdbcConnection;
+	}
+
+	@Override
+	public List<Employee> getEmployees() {
+		Connection jdbcConnection = null;  
+        Statement statement;
+		ResultSet resultSet;
+		jdbcConnection = connectDB(jdbcConnection);
 		List<Employee> employeeList = new ArrayList<Employee>();
         String jdbcListQuery = "SELECT * FROM employee";
 		try {
@@ -177,6 +169,7 @@ public class JDBCPersistance implements Repository {
 			System.out.println("ERROR: Could not read from the database");
 			e.printStackTrace();
 		}        
+		
         return employeeList;
 	}
 
@@ -185,14 +178,7 @@ public class JDBCPersistance implements Repository {
 		Connection jdbcConnection = null;  
         Statement statement;
 		ResultSet resultSet;
-		try {
-			jdbcConnection = this.getConnection();
-			System.out.println("Connected to database");
-		} catch (SQLException e) {
-			System.out.println("ERROR: Could not connect to the database");
-			e.printStackTrace();
-			return null;
-		}
+		jdbcConnection = connectDB(jdbcConnection);
         String jdbcListQuery = "SELECT * FROM employee WHERE id="+employeeId;
         Employee employee = new Employee(0, " ", " ");
 		try {
@@ -218,8 +204,28 @@ public class JDBCPersistance implements Repository {
 
 	@Override
 	public Set<Integer> getAllEmployeeIds() {
-		// TODO Auto-generated method stub
-		return null;
+		Connection jdbcConnection = null;  
+        Statement statement;
+		ResultSet resultSet;
+		List<Integer> employeeIds = new ArrayList<Integer>();
+		jdbcConnection = connectDB(jdbcConnection);
+        String jdbcListQuery = "SELECT * FROM employee WHERE id >= 0";
+		try {
+			statement = jdbcConnection.createStatement();
+			resultSet = statement.executeQuery(jdbcListQuery);
+			while (resultSet.next()) {
+			    int id = resultSet.getInt("id"); 
+			    employeeIds.add(id);
+			    System.out.println(" ID DE EMPLEADO DE BASE DE DATOS: " +id);
+			}
+		    resultSet.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println("ERROR: Could not read from the database");
+			e.printStackTrace();
+		}      
+		Set<Integer> setIds = new HashSet<Integer>(employeeIds);
+		return setIds;
 	}
 
 	@Override
@@ -246,6 +252,11 @@ public class JDBCPersistance implements Repository {
 		
 	}
 	
+	
+	
+	public int getDbLenght(){
+		return getAllEmployeeIds().size();
+	}
 	/**
 	 * Connect to the DB and do some stuff
 	 */

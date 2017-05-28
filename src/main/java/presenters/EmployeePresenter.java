@@ -34,9 +34,10 @@ public class EmployeePresenter {
 		addEmployeeTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
 		//Employee on db
 		Repository dbrepo = new JDBCPersistance();
-		dbrepo.addEmployee(employeeId, new Employee(employeeId,name,address));
+		dbrepo.addEmployee(employeeId, new Employee(7,name,address));
 		List<Employee> exampleEmployees = (List<Employee>) dbrepo.getEmployees();
 		Employee exampleEmployee = dbrepo.getEmployee(1);
+		System.out.println(dbrepo.getAllEmployeeIds());
 		
 	}
 	
