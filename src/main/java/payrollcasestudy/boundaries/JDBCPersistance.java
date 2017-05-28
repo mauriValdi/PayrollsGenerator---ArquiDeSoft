@@ -1,17 +1,13 @@
 package payrollcasestudy.boundaries;
 
 
-import java.util.List;
+import java.util.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Properties;
-import java.util.Set;
 
 import payrollcasestudy.entities.Employee;
 
@@ -145,7 +141,7 @@ public class JDBCPersistance implements Repository {
 	}
 
 	@Override
-	public List<Employee> getEmployees() {
+	public Collection<Employee> getAllEmployees() {
 		Connection jdbcConnection = null;  
         Statement statement;
 		ResultSet resultSet;
@@ -169,8 +165,8 @@ public class JDBCPersistance implements Repository {
 			System.out.println("ERROR: Could not read from the database");
 			e.printStackTrace();
 		}        
-		
-        return employeeList;
+		Collection<Employee> employeeCollection = employeeList;
+        return employeeCollection;
 	}
 
 	@Override

@@ -53,11 +53,6 @@ public class PayrollDatabaseOnMemory implements Repository{
     	return  employees.values();
     }
 
-	@Override
-	public List getEmployees() {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void testDataBase() {

@@ -35,10 +35,10 @@ public class EmployeePresenter {
 		//Employee on db
 		Repository dbrepo = new JDBCPersistance();
 		//dbrepo.addEmployee(employeeId, new Employee(7,name,address));
-		List<Employee> exampleEmployees = (List<Employee>) dbrepo.getEmployees();
+		
+		List<Employee> exampleEmployees = (List<Employee>) dbrepo.getAllEmployees();
 		Employee exampleEmployee = dbrepo.getEmployee(1);
 		System.out.println(dbrepo.getAllEmployeeIds());
-		
 	}
 	
 	public Collection<Employee> showEmployees(){	
