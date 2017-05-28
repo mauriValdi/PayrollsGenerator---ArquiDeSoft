@@ -89,5 +89,23 @@
 				</form>
 			#end			
 		</div>
+		<div class="w3-card-4" style="margin:16%; margin-top:0; margin-bottom:10px">				
+			#if($Employee.getPaymentClassificationString() == "Hourly")
+				<input type='hidden' name='employeeId' value= $Employee.getId()>				
+				<form method='post' action='/TimeCards'>
+					<input type='submit' class="w3-button w3-black w3-hover-deep-orange w3-block" value='Time Card List'>
+				</form>
+			#end
+			#if($Employee.getPaymentClassificationString() == "Commissioned")
+				<form method='post' action='/SaleReceipts'>
+					<input type='hidden' name='employeeId' value= $Employee.getId()>					
+					<input type='submit' class="w3-button w3-black w3-hover-deep-orange w3-block" value='Sale Receipts List'>
+				</form>
+			#end
+			<form method='get' action='/Pay'>
+				<input type='hidden' name='employeeId' value= $Employee.getId()>	
+				<input type='submit' class="w3-button w3-black w3-hover-deep-orange w3-block" value='PayCheck'>
+			</form>			
+		</div>
 	</body>
 </html>

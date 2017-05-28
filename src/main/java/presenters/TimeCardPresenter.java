@@ -1,6 +1,11 @@
 package presenters;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import payrollcasestudy.boundaries.PayrollDatabase;
+import payrollcasestudy.entities.Employee;
+import payrollcasestudy.entities.TimeCard;
+import payrollcasestudy.entities.paymentclassifications.HourlyPaymentClassification;
+import payrollcasestudy.entities.paymentclassifications.PaymentClassification;
 import payrollcasestudy.transactions.Transaction;
 import payrollcasestudy.transactions.add.*;
 
@@ -12,5 +17,14 @@ public class TimeCardPresenter {
 		Calendar date = new GregorianCalendar(year, month - 1, day);
         Transaction timeCardTransaction = new AddTimeCardTransaction(date, hours, employeeId);
         timeCardTransaction.execute();
+	}
+	
+	public TimeCard[] getTimeCardArray(int employeeId)
+	{
+		Employee employee = PayrollDatabase.globalPayrollDatabase.getEmployee(employeeId);
+		PaymentClassification paymentClass = employee.getPaymentClassification();
+		if(paymentClass instanceof HourlyPaymentClassification)		
+			return ((HourlyPaymentClassification) paymentClass).getAllTimeCards();		
+		return null;
 	}
 }

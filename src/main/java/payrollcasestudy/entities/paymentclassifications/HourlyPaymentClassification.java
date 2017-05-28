@@ -2,11 +2,10 @@ package payrollcasestudy.entities.paymentclassifications;
 
 import payrollcasestudy.entities.PayCheck;
 import payrollcasestudy.entities.TimeCard;
-
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class HourlyPaymentClassification extends PaymentClassification{
 
@@ -27,6 +26,17 @@ public class HourlyPaymentClassification extends PaymentClassification{
 
     public void addTimeCard(TimeCard timeCard) {
         timeCardMap.put(timeCard.getDate() ,timeCard);
+    }
+    
+    public TimeCard[] getAllTimeCards()
+    {
+    	TimeCard[] TimeCardArray = new TimeCard[timeCardMap.size()];
+    	int index = 0;
+    	for (Entry<Calendar, TimeCard> mapEntry : timeCardMap.entrySet()) {    	    
+    		TimeCardArray[index] = mapEntry.getValue();
+    	    index++;
+    	}
+    	return TimeCardArray;
     }
 
     @Override

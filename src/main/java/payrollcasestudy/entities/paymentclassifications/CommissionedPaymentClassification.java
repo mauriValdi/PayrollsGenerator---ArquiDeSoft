@@ -6,6 +6,7 @@ import payrollcasestudy.entities.SalesReceipt;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class CommissionedPaymentClassification extends PaymentClassification {
     private Map<Calendar, SalesReceipt> salesReceiptMap = new HashMap<Calendar, SalesReceipt>();
@@ -31,6 +32,17 @@ public class CommissionedPaymentClassification extends PaymentClassification {
 
     public void addSalesReceipt(SalesReceipt salesReceipt) {
         salesReceiptMap.put(salesReceipt.getDate(), salesReceipt);
+    }
+    
+    public SalesReceipt[] getAllSalesReceipts()
+    {
+    	SalesReceipt[] salesReceiptArray = new SalesReceipt[salesReceiptMap.size()];
+    	int index = 0;
+    	for (Entry<Calendar, SalesReceipt> mapEntry : salesReceiptMap.entrySet()) {    	    
+    		salesReceiptArray[index] = mapEntry.getValue();
+    	    index++;
+    	}
+    	return salesReceiptArray;
     }
 
     @Override

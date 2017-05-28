@@ -3,9 +3,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Set;
-
 import payrollcasestudy.boundaries.PayrollDatabase;
-import payrollcasestudy.entities.Employee;
 import payrollcasestudy.entities.PayCheck;
 import payrollcasestudy.transactions.PaydayTransaction;
 
