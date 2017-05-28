@@ -7,6 +7,7 @@ import updatables.SalariedEmployeeViewBuilder;
 
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import payrollcasestudy.boundaries.*;
@@ -31,10 +32,11 @@ public class EmployeePresenter {
 			addEmployeeTransaction = new AddCommissionedEmployeeTransaction(employeeId, name, address, salary , commissionRate);
 		
 		addEmployeeTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
-		
+		//Employee on db
 		Repository dbrepo = new JDBCPersistance();
-		dbrepo.run();
 		dbrepo.addEmployee(employeeId, new Employee(employeeId,name,address));
+		List<Employee> exampleEmployees = (List<Employee>) dbrepo.getEmployees();
+		Employee exampleEmployee = dbrepo.getEmployee(1);
 		
 	}
 	

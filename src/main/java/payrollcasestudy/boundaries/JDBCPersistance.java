@@ -20,26 +20,12 @@ import java.util.Set;
 import payrollcasestudy.entities.Employee;
 
 public class JDBCPersistance implements Repository {
-
-	/** The name of the MySQL account to use (or empty for anonymous) */
 	private final String userName = "root";
-
-	/** The password for the MySQL account (or empty for anonymous) */
 	private final String password = "";
-
-	/** The name of the computer running MySQL */
 	private final String serverName = "localhost";
-
-	/** The port of the MySQL server (default is 3306) */
 	private final int portNumber = 3306;
-
-	/** The name of the database we are testing with (this default is installed with MySQL) */
 	private final String dbName = "test";
-	
-	/** The name of the table we are testing with */
 	private final String tableName = "JDBC_TEST";
-	
-	
 	/**
 	 * Get a new database connection
 	 * 
@@ -141,13 +127,14 @@ public class JDBCPersistance implements Repository {
 		
 		try {
 			String addEmployeeQuery =
-					"INSERT INTO book (title, author, price) VALUES (?, ?, ?)"
+					"INSERT INTO employee (id, name, address, id_payClass) VALUES (?, ?, ?, ?)"
 					;
 
 	        PreparedStatement statement = jdbcConnection.prepareStatement(addEmployeeQuery);
 	        statement.setInt(1, employee.getId());
 	        statement.setString(2, employee.getName());
 	        statement.setString(3, employee.getAddress());
+	        statement.setInt(4, employee.getId());
 	        boolean rowInserted = statement.executeUpdate() > 0;
 	        statement.close();
 		} catch(SQLException exception){
@@ -160,7 +147,9 @@ public class JDBCPersistance implements Repository {
 
 	@Override
 	public List<Employee> getEmployees() {
-		Connection jdbcConnection = null;
+		Connection jdbcConnection = null;  
+        Statement statement;
+		ResultSet resultSet;
 		try {
 			jdbcConnection = this.getConnection();
 			System.out.println("Connected to database");
@@ -169,28 +158,21 @@ public class JDBCPersistance implements Repository {
 			e.printStackTrace();
 			return null;
 		}
-		
 		List<Employee> employeeList = new ArrayList<Employee>();
-        
         String jdbcListQuery = "SELECT * FROM employee";
-         
-         
-        Statement statement;
-		ResultSet resultSet;
 		try {
 			statement = jdbcConnection.createStatement();
 			resultSet = statement.executeQuery(jdbcListQuery);
-			 
 			while (resultSet.next()) {
-			    int id = resultSet.getInt("book_id");
-			    String name = resultSet.getString("title");
-			    String address = resultSet.getString("author");
-			    
+			    int id = resultSet.getInt("id");
+			    String name = resultSet.getString("name");
+			    String address = resultSet.getString("address");
 			    Employee employee = new Employee(id, name, address);
+			    System.out.println(" EMPLEADO DE BASE DE DATOS: " +id+name+address);
 			    employeeList.add(employee);
-			    resultSet.close();
-				statement.close();
 			}
+		    resultSet.close();
+			statement.close();
 		} catch (SQLException e) {
 			System.out.println("ERROR: Could not read from the database");
 			e.printStackTrace();
@@ -200,8 +182,38 @@ public class JDBCPersistance implements Repository {
 
 	@Override
 	public Employee getEmployee(int employeeId) {
-		// TODO Auto-generated method stub
-		return null;
+		Connection jdbcConnection = null;  
+        Statement statement;
+		ResultSet resultSet;
+		try {
+			jdbcConnection = this.getConnection();
+			System.out.println("Connected to database");
+		} catch (SQLException e) {
+			System.out.println("ERROR: Could not connect to the database");
+			e.printStackTrace();
+			return null;
+		}
+        String jdbcListQuery = "SELECT * FROM employee WHERE id="+employeeId;
+        Employee employee = new Employee(0, " ", " ");
+		try {
+			statement = jdbcConnection.createStatement();
+			resultSet = statement.executeQuery(jdbcListQuery);
+			if (resultSet.next()) {
+			    int id = resultSet.getInt("id");
+			    String name = resultSet.getString("name");
+			    String address = resultSet.getString("address");
+			    employee = new Employee(id, name, address);
+			    System.out.println();
+			    System.out.println(" EMPLEADO ENCONTRADO EN BASE DE DATOS: " +id+name+address);
+			    System.out.println();
+			}
+		    resultSet.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println("ERROR: Could not read from the database");
+			e.printStackTrace();
+		}        
+        return employee;
 	}
 
 	@Override
