@@ -2,7 +2,7 @@ package presenters;
 import payrollcasestudy.entities.Employee;
 import payrollcasestudy.transactions.Transaction;
 import payrollcasestudy.transactions.add.*;
-import java.util.Collection;import java.util.List;import java.util.Set;
+import java.util.Collection;import java.util.Set;
 import payrollcasestudy.boundaries.*;
 public class EmployeePresenter {
 	public EmployeePresenter() 	{}

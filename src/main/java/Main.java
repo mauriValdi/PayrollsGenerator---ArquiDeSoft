@@ -80,6 +80,11 @@ public class Main {
 			view.put("Check", payrollPresenter.getPayroll(Integer.parseInt(request.queryParams("year")), Integer.parseInt(request.queryParams("month")), Integer.parseInt(request.queryParams("day")), Integer.parseInt(request.queryParams("employeeId"))));
 			return new ModelAndView(view, "/payroll.vtl");
 		}, new VelocityTemplateEngine());
+		
+		get("/AFP", (request, response) -> {
+			PaydayPresenter presenter = new PaydayPresenter();
+			return presenter.getAllPayChecks(2017, 5, 19);
+		}, JsonUtil.json());	
 	}
 	
 	private static String updateEmployees(String name, String address, int paymentClassification, double hourlyRate, double salary, double commissionRate) {
