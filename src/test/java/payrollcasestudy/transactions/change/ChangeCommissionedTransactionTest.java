@@ -3,6 +3,7 @@ package payrollcasestudy.transactions.change;
 import org.junit.Rule;
 import org.junit.Test;
 import payrollcasestudy.DatabaseResource;
+import payrollcasestudy.boundaries.PayrollDatabaseOnMemory;
 import payrollcasestudy.entities.Employee;
 import payrollcasestudy.entities.paymentclassifications.CommissionedPaymentClassification;
 import payrollcasestudy.entities.paymentschedule.MonthlyPaymentSchedule;
@@ -23,10 +24,10 @@ public class ChangeCommissionedTransactionTest {
         int employeeId = 3;
         AddEmployeeTransaction addEmployeeTransaction =
                 new AddHourlyEmployeeTransaction(employeeId, "Lance", "Home", 24.3);
-        addEmployeeTransaction.execute();
+        addEmployeeTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
 
         ChangeCommissionedTransaction changeCommissionedTransaction = new ChangeCommissionedTransaction(employeeId, 200, 20.0);
-        changeCommissionedTransaction.execute();
+        changeCommissionedTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
 
         Employee employee = database.getInstance().getEmployee(employeeId);
         assertThat(employee.getPaymentClassification(), is(instanceOf(CommissionedPaymentClassification.class)));

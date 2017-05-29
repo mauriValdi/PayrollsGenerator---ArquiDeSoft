@@ -3,6 +3,7 @@ package payrollcasestudy.transactions.add;
 import org.junit.Rule;
 import org.junit.Test;
 import payrollcasestudy.DatabaseResource;
+import payrollcasestudy.boundaries.PayrollDatabaseOnMemory;
 import payrollcasestudy.entities.Employee;
 import payrollcasestudy.entities.paymentclassifications.HourlyPaymentClassification;
 import payrollcasestudy.entities.paymentclassifications.PaymentClassification;
@@ -27,7 +28,7 @@ public class AddHourlyEmployeeTransactionTest  {
         int employeeId = 1;
         Transaction addEmployeeTransaction =
                 new AddHourlyEmployeeTransaction(employeeId, "Steve", "Home", 20.0);
-        addEmployeeTransaction.execute();
+        addEmployeeTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
         Employee employee = database.getInstance().getEmployee(employeeId);
         assertThat(employee.getName(), is("Steve"));
 

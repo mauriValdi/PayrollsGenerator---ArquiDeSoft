@@ -2,14 +2,15 @@ package payrollcasestudy.boundaries;
 
 import payrollcasestudy.entities.Employee;
 
+
 import java.util.*;
 
 /**
  * Listing 19-3
  * Listing 19-4
  */
-public class PayrollDatabase {
-    public static PayrollDatabase globalPayrollDatabase = new PayrollDatabase();
+public class PayrollDatabaseOnMemory implements Repository{
+    public static PayrollDatabaseOnMemory globalPayrollDatabase = new PayrollDatabaseOnMemory();
 
     private Map<Integer, Employee> employees = new HashMap<Integer, Employee>();
     public Map<Integer, Employee> unionMembers = new HashMap<Integer, Employee>();
@@ -36,7 +37,7 @@ public class PayrollDatabase {
         return unionMembers.get(memberId);
     }
 
-    public void addUnionMember(int memberId, Employee employee) {
+    public void addUnionMember (int memberId, Employee employee) {
         unionMembers.put(memberId, employee);
     }
 
@@ -51,6 +52,15 @@ public class PayrollDatabase {
     public Collection<Employee> getAllEmployees(){
     	return  employees.values();
     }
+
+
+	@Override
+	public void testDataBase() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
     
     
 }

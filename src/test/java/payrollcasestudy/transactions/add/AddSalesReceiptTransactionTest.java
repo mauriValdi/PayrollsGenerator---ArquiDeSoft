@@ -3,6 +3,7 @@ package payrollcasestudy.transactions.add;
 import org.junit.Rule;
 import org.junit.Test;
 import payrollcasestudy.DatabaseResource;
+import payrollcasestudy.boundaries.PayrollDatabaseOnMemory;
 import payrollcasestudy.entities.Employee;
 import payrollcasestudy.entities.SalesReceipt;
 import payrollcasestudy.entities.paymentclassifications.CommissionedPaymentClassification;
@@ -27,12 +28,12 @@ public class AddSalesReceiptTransactionTest {
         int employeeId = 2;
         AddCommissionedEmployeeTransaction addCommissionedEmployee =
                 new AddCommissionedEmployeeTransaction(employeeId, "Bill", "Home", 15.25, 0.5);
-        addCommissionedEmployee.execute();
+        addCommissionedEmployee.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
 
         Calendar date = new GregorianCalendar(2001, NOVEMBER, 31);
         Transaction salesReceiptTransaction =
                 new AddSalesReceiptTransaction(date, 1000.0, employeeId);
-        salesReceiptTransaction.execute();
+        salesReceiptTransaction.execute(PayrollDatabaseOnMemory.globalPayrollDatabase);
 
         Employee employee = database.getInstance().getEmployee(employeeId);
         assertThat(employee, is(notNullValue()));

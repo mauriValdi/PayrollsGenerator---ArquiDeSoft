@@ -1,6 +1,7 @@
 package payrollcasestudy.transactions.delete;
 
-import payrollcasestudy.boundaries.PayrollDatabase;
+import payrollcasestudy.boundaries.PayrollDatabaseOnMemory;
+import payrollcasestudy.boundaries.Repository;
 import payrollcasestudy.transactions.Transaction;
 
 public class DeleteEmployeeTransaction implements Transaction{
@@ -10,8 +11,8 @@ public class DeleteEmployeeTransaction implements Transaction{
         this.employeeId = employeeId;
     }
 
-    public void execute() {
-        PayrollDatabase database = PayrollDatabase.globalPayrollDatabase;
+    public void execute(Repository repository) {
+        PayrollDatabaseOnMemory database = PayrollDatabaseOnMemory.globalPayrollDatabase;
         database.deleteEmployee(employeeId);
     }
 }
