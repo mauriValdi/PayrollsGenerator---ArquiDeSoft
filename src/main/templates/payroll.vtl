@@ -5,39 +5,36 @@
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
 	</head>
 	<body>		
-		#if( $foo )
-			<div>						
-				<div>
+		#if( $Check )
+			<div class="w3-card-4" style="margin:16%; margin-top:5%">
+				<header class="w3-container w3-deep-orange">
+					<h1>For $Check.getPayPeriodEnd()</h1>
+				</header>					 
+				<div class="w3-container">				 
 					<label>Gross Pay: </label>
-					$PayCheck.getGrossPay()
-				</div>			
-				<div>
+					$Check.getGrossPay()<br>
 					<label>Deductions: </label>
-					$PayCheck.getDeductions()
-				</div>
-				<div>
+					$Check.getDeductions()<br>
 					<label>Net Pay: </label>
-					$PayCheck.getNetPay()
-				</div>
+					$Check.getNetPay()
+					<br>
+				</div>								
 			</div>
-			<br>
 		#{else}
-			<div>							
-				<div>
+			<div class="w3-card-4" style="margin:16%; margin-top:5%">
+				<header class="w3-container w3-deep-orange">
+					<h1>Its not pay period end yet.</h1>
+				</header>					 
+				<div class="w3-container">				 
 					<label>Gross Pay: </label>
-					0
-				</div>			
-				<div>
+					0<br>
 					<label>Deductions: </label>
-					0
-				</div>
-				<div>
+					0<br>
 					<label>Net Pay: </label>
-					0
-				</div>
+					0()
+					<br>
+				</div>								
 			</div>
-			<br>
-		#end
-		#end
+		#end		
 	</body>
 </html>

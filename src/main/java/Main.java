@@ -47,6 +47,13 @@ public class Main {
 			return null;
 		});
 		
+		post("/SaleReceipts", (request, response) -> {
+			view.clear();
+			SaleReceiptPresenter presenter = new SaleReceiptPresenter();
+			view.put("Receipts", presenter.getSalesReceiptArray(Integer.parseInt(request.queryParams("employeeId"))));
+			return new ModelAndView(view, "/salesReceipts.vtl");
+		}, new VelocityTemplateEngine());
+		
 		post("/AddTimeCard", (request, response) -> {
 			TimeCardPresenter presenter = new TimeCardPresenter();
 			presenter.addTimeCard(Integer.parseInt(request.queryParams("employeeId")), Integer.parseInt(request.queryParams("year")), Integer.parseInt(request.queryParams("month")), Integer.parseInt(request.queryParams("day")), Integer.parseInt(request.queryParams("hours")));
@@ -54,15 +61,23 @@ public class Main {
 			return null;
 		});
 		
-		get("/Pay", (request, response) -> {
+		post("/TimeCards", (request, response) -> {
 			view.clear();
+			TimeCardPresenter presenter = new TimeCardPresenter();
+			view.put("Cards", presenter.getTimeCardArray(Integer.parseInt(request.queryParams("employeeId"))));
+			return new ModelAndView(view, "/timeCards.vtl");
+		}, new VelocityTemplateEngine());
+		
+		post("/Pay", (request, response) -> {
+			view.clear();
+			view.put("Id", Integer.parseInt(request.queryParams("employeeId")));
 			return new ModelAndView(view, "/pay.vtl");
 		}, new VelocityTemplateEngine());
 		
 		post("/Payroll", (request, response) -> {
 			view.clear();
 			PaydayPresenter payrollPresenter = new PaydayPresenter();
-			view.put("Payroll", payrollPresenter.getPayroll(Integer.parseInt(request.queryParams("year")), Integer.parseInt(request.queryParams("month")), Integer.parseInt(request.queryParams("day"))));
+			view.put("Check", payrollPresenter.getPayroll(Integer.parseInt(request.queryParams("year")), Integer.parseInt(request.queryParams("month")), Integer.parseInt(request.queryParams("day")), Integer.parseInt(request.queryParams("employeeId"))));
 			return new ModelAndView(view, "/payroll.vtl");
 		}, new VelocityTemplateEngine());
 	}

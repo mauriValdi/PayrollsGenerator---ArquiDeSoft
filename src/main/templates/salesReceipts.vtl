@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<title>Time Cards</title>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	</head>
+	<body>
+		<div class="w3-row">
+			#foreach( $Receipt in $Receipts )			
+				<div class="w3-quarter w3-border">
+					<header class="w3-container w3-deep-orange">
+						<h3>$Receipt.getDate()</h3>
+					</header>					 
+					<div class="w3-container w3-center" style="height:50px;">				 
+						<label>Amount: </label><br>
+						$Receipt.getAmount()
+					</div>							
+				</div>			
+			#end
+		<div>
+	</body>
+</html>
