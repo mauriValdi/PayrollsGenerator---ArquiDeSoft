@@ -82,8 +82,8 @@ public class Main {
 		}, new VelocityTemplateEngine());
 		
 		get("/AFP", (request, response) -> {
-			EmployeePresenter presenter = new EmployeePresenter();			
-			return presenter.showEmployees();
+			PaydayPresenter presenter = new PaydayPresenter();
+			return presenter.getAllPayChecks(2017, 5, 19);
 		}, JsonUtil.json());	
 	}
 	
