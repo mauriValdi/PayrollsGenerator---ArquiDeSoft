@@ -1,10 +1,12 @@
 package payrollcasestudy.entities;
 
+import payrollcasestudy.entities.affiliations.Affilliation;
 import payrollcasestudy.entities.affiliations.UnionAffiliation;
 import payrollcasestudy.entities.paymentclassifications.*;
 import payrollcasestudy.entities.paymentmethods.PaymentMethod;
 import payrollcasestudy.entities.paymentschedule.PaymentSchedule;
 import java.util.Calendar;
+import java.util.List;
 
 public class Employee {
     private PaymentClassification paymentClassification;
@@ -13,6 +15,7 @@ public class Employee {
     private int employeeId;
     private String name;
     private String address;
+    private List<Affilliation> employeeaffilliations;
     
 	private UnionAffiliation employeeUnionAffiliation = UnionAffiliation.NO_AFFILIATION;;
 
