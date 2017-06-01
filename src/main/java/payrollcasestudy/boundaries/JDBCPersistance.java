@@ -10,6 +10,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import payrollcasestudy.entities.Employee;
+import payrollcasestudy.entities.paymentclassifications.CommissionedPaymentClassification;
+import payrollcasestudy.entities.paymentclassifications.HourlyPaymentClassification;
+import payrollcasestudy.entities.paymentclassifications.SalariedClassification;
+import payrollcasestudy.entities.paymentmethods.HoldMethod;
+import payrollcasestudy.entities.paymentschedule.WeeklyPaymentSchedule;
 
 public class JDBCPersistance implements Repository {
 	private final String userName = "root";
@@ -126,6 +131,7 @@ public class JDBCPersistance implements Repository {
 			exception.printStackTrace();
 			return;
 		}
+		addPaymentClassification(employeeId,employee);
 		// TODO Auto-generated method stub
 	}
 
@@ -148,23 +154,11 @@ public class JDBCPersistance implements Repository {
 		jdbcConnection = connectDB(jdbcConnection);
 		List<Employee> employeeList = new ArrayList<Employee>();
         String jdbcListQuery = "SELECT * FROM employee";
-		try {
-			statement = jdbcConnection.createStatement();
-			resultSet = statement.executeQuery(jdbcListQuery);
-			while (resultSet.next()) {
-			    int id = resultSet.getInt("id");
-			    String name = resultSet.getString("name");
-			    String address = resultSet.getString("address");
-			    Employee employee = new Employee(id, name, address);
-			    System.out.println(" EMPLEADO DE BASE DE DATOS: " +id+name+address);
-			    employeeList.add(employee);
-			}
-		    resultSet.close();
-			statement.close();
-		} catch (SQLException e) {
-			System.out.println("ERROR: Could not read from the database");
-			e.printStackTrace();
-		}        
+		List<Integer> employeeIds = (List<Integer>) getAllEmployeeIds();
+		for(int id:employeeIds)
+		{
+			employeeList.add(getEmployee(id));
+		}
 		Collection<Employee> employeeCollection = employeeList;
         return employeeCollection;
 	}
@@ -188,6 +182,42 @@ public class JDBCPersistance implements Repository {
 			    System.out.println();
 			    System.out.println(" EMPLEADO ENCONTRADO EN BASE DE DATOS: " +id+name+address);
 			    System.out.println();
+			}
+		    resultSet.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println("ERROR: Could not read from the database");
+			e.printStackTrace();
+		}        
+		jdbcConnection = connectDB(jdbcConnection);
+        jdbcListQuery = "SELECT * FROM paymentclassification WHERE Id="+employeeId;
+		try {
+			statement = jdbcConnection.createStatement();
+			resultSet = statement.executeQuery(jdbcListQuery);
+			if (resultSet.next()) {
+			    int id = resultSet.getInt("Id");
+			    String paymentClass = resultSet.getString("paymentClass");
+			    Double salary = resultSet.getDouble("salary");
+			    Double hourlyRate = resultSet.getDouble("hourlyRate");
+			    Double commissionRate = resultSet.getDouble("commissionRate");
+			    
+			    System.out.println();
+			    System.out.println("CLASIFICACION DE PAGOS: " +paymentClass);
+			    System.out.println();
+			    
+			    if(Objects.equals(paymentClass, "Hourly")){
+			    	employee.setPaymentClassification(new HourlyPaymentClassification(hourlyRate));
+			    	employee.setPaymentSchedule(new WeeklyPaymentSchedule());
+			    }
+			    if(Objects.equals(paymentClass, "Salaried")){
+			    	employee.setPaymentClassification(new SalariedClassification(salary));
+			    	employee.setPaymentSchedule(new WeeklyPaymentSchedule());
+			    }
+			    if(Objects.equals(paymentClass, "Commissioned")){
+			    	employee.setPaymentClassification(new CommissionedPaymentClassification(salary, commissionRate));
+			    	employee.setPaymentSchedule(new WeeklyPaymentSchedule());
+			    }
+			    employee.setPaymentMethod(new HoldMethod());
 			}
 		    resultSet.close();
 			statement.close();
@@ -224,6 +254,31 @@ public class JDBCPersistance implements Repository {
 		return setIds;
 	}
 
+	
+	public void addPaymentClassification(int employeeId, Employee employee){
+		Connection jdbcConnection = null;
+		jdbcConnection = connectDB(jdbcConnection);	
+		try {
+			String addEmployeeQuery =
+					"INSERT INTO paymentclassification (Id, paymentClass, salary, hourlyRate, commissionRate) VALUES (?, ?, ?, ?, ?)"
+					;
+
+	        PreparedStatement statement = jdbcConnection.prepareStatement(addEmployeeQuery);
+	        statement.setInt(1, employeeId);
+	        statement.setString(2, employee.getPaymentClassificationString());
+	        statement.setDouble(3, employee.getSalary());
+	        statement.setDouble(4, employee.getHourlyRate());
+	        statement.setDouble(5, employee.getCommisionRate());
+	        statement.executeUpdate();
+	        statement.close();
+		} catch(SQLException exception){
+			System.out.println("ERROR: Could not add the payment classification");
+			exception.printStackTrace();
+			return;
+		}		
+	}
+	
+	
 	@Override
 	public void deleteUnionMember(int memberId) {
 		// TODO Auto-generated method stub
