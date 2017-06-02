@@ -8,7 +8,7 @@
 			#foreach( $Receipt in $Receipts )			
 				<div class="w3-quarter w3-border">
 					<header class="w3-container w3-deep-orange">
-						<h3>$Card.getAsLocalDate().getMonth() $Card.getAsLocalDate().getDayOfMonth() of $Card.getAsLocalDate().getYear() - $Card.getAsLocalDate().getDayOfWeek()</h3>
+						<h3>$Receipt.getAsLocalDate().getMonth() $Receipt.getAsLocalDate().getDayOfMonth() of $Receipt.getAsLocalDate().getYear() - $Receipt.getAsLocalDate().getDayOfWeek()</h3>
 					</header>					 
 					<div class="w3-container w3-center" style="height:50px;">				 
 						<label>Amount: </label><br>

@@ -129,10 +129,10 @@ public class JDBCPersistance implements Repository {
 		jdbcConnection = connectDB(jdbcConnection);
 		List<Employee> employeeList = new ArrayList<Employee>();
         String jdbcListQuery = "SELECT * FROM employee";
-		List<Integer> employeeIds = (List<Integer>) getAllEmployeeIds();
-		for(int id:employeeIds)
+		Object[] employeeIds = getAllEmployeeIds().toArray();
+		for(Object id:employeeIds)
 		{
-			employeeList.add(getEmployee(id));
+			employeeList.add(getEmployee((int) id));
 		}
 		Collection<Employee> employeeCollection = employeeList;
         return employeeCollection;
@@ -270,7 +270,7 @@ public class JDBCPersistance implements Repository {
 			String addTimeCardsQuery = "INSERT INTO timecard (id, dateTime, hours, id_payClassification) VALUES (?, ?, ?, ?)";
 			PreparedStatement statement = jdbcConnection.prepareStatement(addTimeCardsQuery);
 			statement.setInt(1, employeeId);
-		    statement.setDate(2, (Date) timeCard.getDateFormat());
+		    statement.setDate(2, new java.sql.Date(timeCard.getDateFormat().getTime()));
 		    statement.setDouble(3, timeCard.getHours());
 		    statement.setDouble(4, employeeId);
 		    statement.executeUpdate();
@@ -288,7 +288,7 @@ public class JDBCPersistance implements Repository {
 			String addTimeCardsQuery = "INSERT INTO salesreceipt (Id, calendar, amount, id_payClassification) VALUES (?, ?, ?, ?)";
 			PreparedStatement statement = jdbcConnection.prepareStatement(addTimeCardsQuery);
 			statement.setInt(1, employeeId);
-		    statement.setDate(2, (Date) salesReceipt.getDateFormat());
+		    statement.setDate(2, new java.sql.Date(salesReceipt.getDateFormat().getTime()));
 		    statement.setDouble(3, salesReceipt.getAmount());
 		    statement.setDouble(4, employeeId);
 		    statement.executeUpdate();
