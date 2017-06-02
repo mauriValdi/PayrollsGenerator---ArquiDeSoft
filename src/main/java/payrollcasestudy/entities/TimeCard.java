@@ -1,5 +1,8 @@
 package payrollcasestudy.entities;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Calendar;
 
 public class TimeCard {
@@ -17,5 +20,12 @@ public class TimeCard {
 
     public double getHours() {
         return hours;
+    }
+    
+    public LocalDate getAsLocalDate()
+    {
+    	LocalDateTime dateTime = LocalDateTime.ofInstant(date.toInstant(), ZoneId.systemDefault());
+        LocalDate localDate = dateTime.toLocalDate();
+		return localDate;
     }
 }
