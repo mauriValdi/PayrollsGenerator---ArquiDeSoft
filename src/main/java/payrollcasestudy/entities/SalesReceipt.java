@@ -1,6 +1,7 @@
 package payrollcasestudy.entities;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class SalesReceipt {
     private Calendar date;
@@ -17,5 +18,9 @@ public class SalesReceipt {
 
     public double getAmount() {
         return amount;
+    }
+    
+    public Date getDateFormat(){
+    	return date.getTime();
     }
 }

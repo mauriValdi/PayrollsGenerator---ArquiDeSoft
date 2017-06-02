@@ -3,6 +3,7 @@ package payrollcasestudy.boundaries;
 
 import java.util.*;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,10 +11,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import payrollcasestudy.entities.Employee;
+import payrollcasestudy.entities.SalesReceipt;
+import payrollcasestudy.entities.TimeCard;
 import payrollcasestudy.entities.paymentclassifications.CommissionedPaymentClassification;
 import payrollcasestudy.entities.paymentclassifications.HourlyPaymentClassification;
+import payrollcasestudy.entities.paymentclassifications.PaymentClassification;
 import payrollcasestudy.entities.paymentclassifications.SalariedClassification;
 import payrollcasestudy.entities.paymentmethods.HoldMethod;
+import payrollcasestudy.entities.paymentschedule.BiweeklyPaymentSchedule;
+import payrollcasestudy.entities.paymentschedule.MonthlyPaymentSchedule;
 import payrollcasestudy.entities.paymentschedule.WeeklyPaymentSchedule;
 
 public class JDBCPersistance implements Repository {
@@ -23,12 +29,7 @@ public class JDBCPersistance implements Repository {
 	private final int portNumber = 3306;
 	private final String dbName = "test";
 	private final String tableName = "JDBC_TEST";
-	/**
-	 * Get a new database connection
-	 * 
-	 * @return
-	 * @throws SQLException
-	 */
+	
 	public Connection getConnection() throws SQLException {
 		Connection conn = null;
 		Properties connectionProps = new Properties();
@@ -61,54 +62,6 @@ public class JDBCPersistance implements Repository {
 	    }
 	}
 	
-	/**
-	 * Connect to MySQL and do some stuff.
-	 */
-	public void testDataBase() {
-
-		// Connect to MySQL
-		Connection conn = null;
-		try {
-			conn = this.getConnection();
-			System.out.println("Connected to database");
-		} catch (SQLException e) {
-			System.out.println("ERROR: Could not connect to the database");
-			e.printStackTrace();
-			return;
-		}
-
-		// Create a table
-		try {
-		    String createString =
-			        "CREATE TABLE " + this.tableName + " ( " +
-			        "ID INTEGER NOT NULL, " +
-			        "NAME varchar(40) NOT NULL, " +
-			        "STREET varchar(40) NOT NULL, " +
-			        "CITY varchar(20) NOT NULL, " +
-			        "STATE char(2) NOT NULL, " +
-			        "ZIP char(5), " +
-			        "PRIMARY KEY (ID))";
-			this.executeUpdate(conn, createString);
-			System.out.println("Created a table");
-	    } catch (SQLException e) {
-			System.out.println("ERROR: Could not create the table");
-			e.printStackTrace();
-			return;
-		}
-		
-		// Drop the table
-		try {
-		    String dropString = "DROP TABLE " + this.tableName;
-			this.executeUpdate(conn, dropString);
-			System.out.println("Dropped the table");
-	    } catch (SQLException e) {
-			System.out.println("ERROR: Could not drop the table");
-			e.printStackTrace();
-			return;
-		}
-	}
-	
-	
 
 	@Override
 	public void addEmployee(int employeeId, Employee employee) {
@@ -116,14 +69,11 @@ public class JDBCPersistance implements Repository {
 		jdbcConnection = connectDB(jdbcConnection);	
 		try {
 			String addEmployeeQuery =
-					"INSERT INTO employee (id, name, address, id_payClass) VALUES (?, ?, ?, ?)"
-					;
-
+					"INSERT INTO employee (name, address, id_payClass) VALUES (?, ?, ?)";
 	        PreparedStatement statement = jdbcConnection.prepareStatement(addEmployeeQuery);
-	        statement.setInt(1, employee.getId());
-	        statement.setString(2, employee.getName());
-	        statement.setString(3, employee.getAddress());
-	        statement.setInt(4, employee.getId());
+	        statement.setString(1, employee.getName());
+	        statement.setString(2, employee.getAddress());
+	        statement.setInt(3, employee.getId());
 	        statement.executeUpdate();
 	        statement.close();
 		} catch(SQLException exception){
@@ -131,9 +81,36 @@ public class JDBCPersistance implements Repository {
 			exception.printStackTrace();
 			return;
 		}
-		addPaymentClassification(employeeId,employee);
-		// TODO Auto-generated method stub
+		int lastEmployeeId = getLastEmployeeId();
+		addPaymentClassification(lastEmployeeId,employee);
+		setTimeCards(lastEmployeeId, employee);
+		setSalesReceipments(lastEmployeeId, employee);
 	}
+	
+	public int getLastEmployeeId(){
+		int lastId = 0;
+		Connection jdbcConnection = null;  
+        Statement statement;
+		ResultSet resultSet;
+		jdbcConnection = connectDB(jdbcConnection);
+        String jdbcListQuery = "SELECT Id FROM employee ORDER BY Id DESC LIMIT 1";
+		try {
+			statement = jdbcConnection.createStatement();
+			resultSet = statement.executeQuery(jdbcListQuery);
+			if (resultSet.next()) {
+				lastId = resultSet.getInt("id");
+			}
+		    resultSet.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println("ERROR: Could not read from the database");
+			e.printStackTrace();
+		}  
+		return lastId;
+	}
+	
+		
+	
 
 	private Connection connectDB(Connection jdbcConnection) {
 		try {
@@ -211,11 +188,11 @@ public class JDBCPersistance implements Repository {
 			    }
 			    if(Objects.equals(paymentClass, "Salaried")){
 			    	employee.setPaymentClassification(new SalariedClassification(salary));
-			    	employee.setPaymentSchedule(new WeeklyPaymentSchedule());
+			    	employee.setPaymentSchedule(new MonthlyPaymentSchedule());
 			    }
 			    if(Objects.equals(paymentClass, "Commissioned")){
 			    	employee.setPaymentClassification(new CommissionedPaymentClassification(salary, commissionRate));
-			    	employee.setPaymentSchedule(new WeeklyPaymentSchedule());
+			    	employee.setPaymentSchedule(new BiweeklyPaymentSchedule());
 			    }
 			    employee.setPaymentMethod(new HoldMethod());
 			}
@@ -259,11 +236,11 @@ public class JDBCPersistance implements Repository {
 		Connection jdbcConnection = null;
 		jdbcConnection = connectDB(jdbcConnection);	
 		try {
-			String addEmployeeQuery =
+			String addPaymentClassQuery =
 					"INSERT INTO paymentclassification (Id, paymentClass, salary, hourlyRate, commissionRate) VALUES (?, ?, ?, ?, ?)"
 					;
 
-	        PreparedStatement statement = jdbcConnection.prepareStatement(addEmployeeQuery);
+	        PreparedStatement statement = jdbcConnection.prepareStatement(addPaymentClassQuery);
 	        statement.setInt(1, employeeId);
 	        statement.setString(2, employee.getPaymentClassificationString());
 	        statement.setDouble(3, employee.getSalary());
@@ -277,6 +254,76 @@ public class JDBCPersistance implements Repository {
 			return;
 		}		
 	}
+	
+	public void setTimeCards(int employeeID, Employee employee){
+		PaymentClassification payClass= employee.getPaymentClassification();
+		if(employee.getPaymentClassificationString()=="Hourly")
+		{
+			HourlyPaymentClassification hourlyPayClass = (HourlyPaymentClassification) payClass;
+			TimeCard[] timeCards = hourlyPayClass.getAllTimeCards();
+			for(TimeCard timeCard : timeCards){
+				saveTimeCard(employeeID, timeCard);
+			}
+		}	
+	}
+	
+	public void saveTimeCard(int employeeId, TimeCard timeCard){
+		Connection jdbcConnection = null;
+		jdbcConnection = connectDB(jdbcConnection);
+		try {
+			String addTimeCardsQuery = "INSERT INTO timecard (id, dateTime, hours, id_payClassification) VALUES (?, ?, ?, ?)";
+			PreparedStatement statement = jdbcConnection.prepareStatement(addTimeCardsQuery);
+			statement.setInt(1, employeeId);
+		    statement.setDate(2, (Date) timeCard.getDateFormat());
+		    statement.setDouble(3, timeCard.getHours());
+		    statement.setDouble(4, employeeId);
+		    statement.executeUpdate();
+		    statement.close();
+		} catch (SQLException exception) {
+			System.out.println("ERROR: Could not add the timeCard ");
+			exception.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	public void setSalesReceipt(int employeeId, SalesReceipt salesReceipt){
+		Connection jdbcConnection = null;
+		jdbcConnection = connectDB(jdbcConnection);
+		try {
+			String addTimeCardsQuery = "INSERT INTO salesreceipt (Id, calendar, amount, id_payClassification) VALUES (?, ?, ?, ?)";
+			PreparedStatement statement = jdbcConnection.prepareStatement(addTimeCardsQuery);
+			statement.setInt(1, employeeId);
+		    statement.setDate(2, (Date) salesReceipt.getDateFormat());
+		    statement.setDouble(3, salesReceipt.getAmount());
+		    statement.setDouble(4, employeeId);
+		    statement.executeUpdate();
+		    statement.close();
+		} catch (SQLException exception) {
+			System.out.println("ERROR: Could not add the receipment ");
+			exception.printStackTrace();
+		}
+	}
+	
+	public void setSalesReceipments(int employeeID, Employee employee){
+		PaymentClassification payClass= employee.getPaymentClassification();
+		if(employee.getPaymentClassificationString()=="Commissioned")
+		{
+			CommissionedPaymentClassification commissionedPayClass = (CommissionedPaymentClassification) payClass;
+			SalesReceipt[] salesReceiptments = commissionedPayClass.getAllSalesReceipts();
+			for(SalesReceipt salesReceipt : salesReceiptments){
+				setSalesReceipt(employeeID, salesReceipt);
+			}
+		}
+		
+	}
+	
+	
+	
+	
+	
 	
 	
 	@Override
@@ -311,5 +358,11 @@ public class JDBCPersistance implements Repository {
 	/**
 	 * Connect to the DB and do some stuff
 	 */
+
+	@Override
+	public void testDataBase() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }
