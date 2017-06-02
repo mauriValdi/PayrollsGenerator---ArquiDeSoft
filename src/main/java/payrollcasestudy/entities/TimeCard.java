@@ -1,6 +1,7 @@
 package payrollcasestudy.entities;
 
 import java.util.Calendar;
+import java.util.Date;
 
 public class TimeCard {
     private Calendar date;
@@ -17,5 +18,9 @@ public class TimeCard {
 
     public double getHours() {
         return hours;
+    }
+    
+    public Date getDateFormat(){
+    	return date.getTime();
     }
 }
