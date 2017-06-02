@@ -83,8 +83,6 @@ public class JDBCPersistance implements Repository {
 		}
 		int lastEmployeeId = getLastEmployeeId();
 		addPaymentClassification(lastEmployeeId,employee);
-		setTimeCards(lastEmployeeId, employee);
-		setSalesReceipments(lastEmployeeId, employee);
 	}
 	
 	public int getLastEmployeeId(){
@@ -183,7 +181,12 @@ public class JDBCPersistance implements Repository {
 			    System.out.println();
 			    
 			    if(Objects.equals(paymentClass, "Hourly")){
-			    	employee.setPaymentClassification(new HourlyPaymentClassification(hourlyRate));
+			    	HourlyPaymentClassification hourly = new HourlyPaymentClassification(hourlyRate);
+			    	List<TimeCard> cardList= getTimeCards(employeeId);
+			    	for(TimeCard timeCard : cardList){
+			    		hourly.addTimeCard(timeCard);
+			    	}
+			    	employee.setPaymentClassification(hourly);
 			    	employee.setPaymentSchedule(new WeeklyPaymentSchedule());
 			    }
 			    if(Objects.equals(paymentClass, "Salaried")){
@@ -191,7 +194,12 @@ public class JDBCPersistance implements Repository {
 			    	employee.setPaymentSchedule(new MonthlyPaymentSchedule());
 			    }
 			    if(Objects.equals(paymentClass, "Commissioned")){
-			    	employee.setPaymentClassification(new CommissionedPaymentClassification(salary, commissionRate));
+			    	CommissionedPaymentClassification commissioned = new CommissionedPaymentClassification(salary, commissionRate);
+			    	List<SalesReceipt> salesReceiptList= getSaleReceipts(employeeId);
+			    	for(SalesReceipt saleReceipt : salesReceiptList){
+			    		commissioned.addSalesReceipt(saleReceipt);
+			    	}
+			    	employee.setPaymentClassification(commissioned);
 			    	employee.setPaymentSchedule(new BiweeklyPaymentSchedule());
 			    }
 			    employee.setPaymentMethod(new HoldMethod());
@@ -255,18 +263,6 @@ public class JDBCPersistance implements Repository {
 		}		
 	}
 	
-	public void setTimeCards(int employeeID, Employee employee){
-		PaymentClassification payClass= employee.getPaymentClassification();
-		if(employee.getPaymentClassificationString()=="Hourly")
-		{
-			HourlyPaymentClassification hourlyPayClass = (HourlyPaymentClassification) payClass;
-			TimeCard[] timeCards = hourlyPayClass.getAllTimeCards();
-			for(TimeCard timeCard : timeCards){
-				saveTimeCard(employeeID, timeCard);
-			}
-		}	
-	}
-	
 	public void saveTimeCard(int employeeId, TimeCard timeCard){
 		Connection jdbcConnection = null;
 		jdbcConnection = connectDB(jdbcConnection);
@@ -285,11 +281,7 @@ public class JDBCPersistance implements Repository {
 		}
 	}
 	
-	
-	
-	
-	
-	public void setSalesReceipt(int employeeId, SalesReceipt salesReceipt){
+	public void saveSalesReceipt(int employeeId, SalesReceipt salesReceipt){
 		Connection jdbcConnection = null;
 		jdbcConnection = connectDB(jdbcConnection);
 		try {
@@ -307,20 +299,59 @@ public class JDBCPersistance implements Repository {
 		}
 	}
 	
-	public void setSalesReceipments(int employeeID, Employee employee){
-		PaymentClassification payClass= employee.getPaymentClassification();
-		if(employee.getPaymentClassificationString()=="Commissioned")
-		{
-			CommissionedPaymentClassification commissionedPayClass = (CommissionedPaymentClassification) payClass;
-			SalesReceipt[] salesReceiptments = commissionedPayClass.getAllSalesReceipts();
-			for(SalesReceipt salesReceipt : salesReceiptments){
-				setSalesReceipt(employeeID, salesReceipt);
+	public List<TimeCard> getTimeCards(int employeeId){
+			Connection jdbcConnection = null;  
+	        Statement statement;
+			ResultSet resultSet;
+			jdbcConnection = connectDB(jdbcConnection);
+	        String jdbcListQuery = "SELECT `dateTime`, `hours` FROM timecard WHERE id_payClassification="+employeeId;
+	        List<TimeCard> resultList = new ArrayList();
+			try {
+				statement = jdbcConnection.createStatement();
+				resultSet = statement.executeQuery(jdbcListQuery);
+				while (resultSet.next()) {
+				    Date dateCalendar = resultSet.getDate("dateTime");
+				    Double hours = resultSet.getDouble("hours");
+				    Calendar calendar = Calendar.getInstance();
+				    calendar.setTime(dateCalendar);
+				    TimeCard timeCard= new TimeCard(calendar, hours);
+				    resultList.add(timeCard);
+				}
+			    resultSet.close();
+				statement.close();
+			} catch (SQLException e) {
+				System.out.println("ERROR: Could not read from the database");
+				e.printStackTrace();
 			}
-		}
-		
+			return resultList;
 	}
 	
-	
+	public List<SalesReceipt> getSaleReceipts(int employeeId){
+		Connection jdbcConnection = null;  
+        Statement statement;
+		ResultSet resultSet;
+		jdbcConnection = connectDB(jdbcConnection);
+        String jdbcListQuery = "SELECT `calendar`, `amount` FROM salesreceipt WHERE id_payClassification="+employeeId;
+        List<SalesReceipt> resultList = new ArrayList();
+		try {
+			statement = jdbcConnection.createStatement();
+			resultSet = statement.executeQuery(jdbcListQuery);
+			while (resultSet.next()) {
+			    Date dateCalendar = resultSet.getDate("calendar");
+			    Double hours = resultSet.getDouble("amount");
+			    Calendar calendar = Calendar.getInstance();
+			    calendar.setTime(dateCalendar);
+			    SalesReceipt saleReceipt= new SalesReceipt(calendar, hours);
+			    resultList.add(saleReceipt);
+			}
+		    resultSet.close();
+			statement.close();
+		} catch (SQLException e) {
+			System.out.println("ERROR: Could not read from the database");
+			e.printStackTrace();
+		}
+		return resultList;
+}
 	
 	
 	

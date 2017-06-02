@@ -28,6 +28,7 @@ public class AddTimeCardTransaction implements Transaction {
             if (paymentClassification instanceof HourlyPaymentClassification){
                 HourlyPaymentClassification classification = (HourlyPaymentClassification) paymentClassification;
                 classification.addTimeCard(new TimeCard(date, hours));
+                repository.saveTimeCard(employeeId, new TimeCard(date, hours));
             }
         }
     }

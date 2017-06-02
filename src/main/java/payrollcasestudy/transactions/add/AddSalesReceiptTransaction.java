@@ -29,6 +29,7 @@ public class AddSalesReceiptTransaction implements Transaction{
                 CommissionedPaymentClassification commissionedPaymentClassification =
                         (CommissionedPaymentClassification) paymentClassification;
                 commissionedPaymentClassification.addSalesReceipt(new SalesReceipt(date, amount));
+                repository.saveSalesReceipt(employeeId, new SalesReceipt(date, amount));
             }
         }
     }

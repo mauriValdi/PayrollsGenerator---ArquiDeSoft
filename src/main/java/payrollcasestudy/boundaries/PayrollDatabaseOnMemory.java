@@ -1,7 +1,8 @@
 package payrollcasestudy.boundaries;
 
 import payrollcasestudy.entities.Employee;
-
+import payrollcasestudy.entities.SalesReceipt;
+import payrollcasestudy.entities.TimeCard;
 
 import java.util.*;
 
@@ -56,6 +57,18 @@ public class PayrollDatabaseOnMemory implements Repository{
 
 	@Override
 	public void testDataBase() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void saveTimeCard(int employeeId, TimeCard timeCard) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void saveSalesReceipt(int employeeId, SalesReceipt salesReceipt) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Set;
 
 import payrollcasestudy.entities.Employee;
+import payrollcasestudy.entities.SalesReceipt;
+import payrollcasestudy.entities.TimeCard;
 
 public interface Repository {
 	void addEmployee(int employeeId, Employee employee);
@@ -16,4 +18,6 @@ public interface Repository {
 	void deleteEmployee(int employeeId);
 	void testDataBase();
 	Collection<Employee> getAllEmployees();
+	void saveTimeCard(int employeeId, TimeCard timeCard);
+	void saveSalesReceipt(int employeeId, SalesReceipt salesReceipt);
 }
